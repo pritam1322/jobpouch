@@ -1,6 +1,4 @@
-import authOptions from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { publicProcedure, router } from "./index";
 
@@ -20,10 +18,37 @@ export const appRouter = router({
       if (!candidateId) {
         throw new Error("Not authenticated");
       } else {
-        return await prisma.jobApplication.findFirst({ where: { candidateId } });
+        return await prisma.jobApplication.findMany({ where: { candidateId } });
       }
     }),
 
+    getUserByEmail: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { email } = input;
+  
+      if (!email) {
+        throw new Error("Email not provided");
+      }
+  
+      const user = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
+  
+      if (!user) {
+        throw new Error("User not found");
+      }
+  
+      return user;
+    }),
+  
+    
   createApplication: publicProcedure
     .input(
       z.object({
@@ -32,6 +57,8 @@ export const appRouter = router({
         companyName: z.string(),
         status: z.string(),
         appliedDate: z.string().datetime(),
+        referralPerson: z.string().optional(),
+        jobLink: z.string().optional(),
       })
     )
     .mutation(async ({ input}) => {
@@ -45,6 +72,8 @@ export const appRouter = router({
           companyName: input.companyName,
           status: input.status,
           appliedDate: input.appliedDate,
+          referralPerson: input.referralPerson || null,
+          jobLink: input.jobLink,
         },
       });
 

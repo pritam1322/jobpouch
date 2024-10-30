@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Provider } from "@/lib/reactQuery-provider";
+import JobHeader from "@/components/JobHeader";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,6 +22,7 @@ export default function JobLayout({
         <SessionWrapper >
           <Provider>
             <Toaster />
+            <JobHeader />
             {children}
           </Provider>
         </SessionWrapper>

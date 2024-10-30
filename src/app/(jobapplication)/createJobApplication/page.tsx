@@ -1,13 +1,18 @@
 'use client';
 import { trpc } from '@/trpc-client/client';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function CreateJobApplication() {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
+  const [jobLink, setJobLink] = useState('');
+  const [referralEmail, setReferralEmail] = useState('');
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
+  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!session?.user?.id) {
@@ -15,16 +20,20 @@ export default function CreateJobApplication() {
       return;
     }
     try {
-      await createApplication.mutate({
+      const jobAdded = await createApplication.mutateAsync({
         candidateId: Number(session.user.id),
         companyName,
         jobTitle,
         status: 'Applied',
         appliedDate: new Date().toISOString(),
+        referralPerson: referralEmail,
+        jobLink,
       });
-      alert('Application Created!');
+      console.log(jobAdded);
+      toast.success(`Job added to the list of applications`);
+      router.push('/viewJobApplication'  + "?" + `id=${jobAdded.id.toString()}`);
     } catch (error) {
-      console.error('Error creating application:', error);
+      toast.error('Error creating application');
     }
   };
 
@@ -44,7 +53,7 @@ export default function CreateJobApplication() {
             placeholder="Enter company name"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
@@ -57,7 +66,33 @@ export default function CreateJobApplication() {
             placeholder="Enter job title"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-white font-semibold mb-2" htmlFor="position">
+            Referral&apos;s Email
+          </label>
+          <input
+            type="text"
+            id="referralPerson"
+            placeholder="Enter email id of the person who referred you"
+            value={referralEmail}
+            onChange={(e) => setReferralEmail(e.target.value)}
+            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-white font-semibold mb-2" htmlFor="position">
+            Job Link
+          </label>
+          <input
+            type="text"
+            id="jobLink"
+            placeholder="Enter job link"
+            value={jobLink}
+            onChange={(e) => setJobLink(e.target.value)}
+            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <button

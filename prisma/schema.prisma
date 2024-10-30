@@ -25,12 +25,14 @@ model User {
 }
 
 model JobApplication {
-  id         Int      @id @default(autoincrement())
-  candidateId Int
-  jobTitle   String
-  companyName String
-  status     String   // e.g., Applied, Interviewing, Offer, etc.
-  appliedDate DateTime  @default(now())
+  id              Int      @id @default(autoincrement())
+  candidateId     Int
+  jobTitle        String
+  companyName     String
+  status          String   // e.g., Applied, Interviewing, Offer, etc.
+  appliedDate     DateTime  @default(now())
+  referralPerson  String?   
+  jobLink         String
 
   User User @relation(fields: [candidateId], references: [id])
 }
