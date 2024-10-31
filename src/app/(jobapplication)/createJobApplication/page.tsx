@@ -1,6 +1,7 @@
 'use client';
 import { trpc } from '@/trpc-client/client';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -9,6 +10,7 @@ export default function CreateJobApplication() {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [jobLink, setJobLink] = useState('');
+  const [jobId, setJobId] = useState('');
   const [referralEmail, setReferralEmail] = useState('');
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
@@ -29,7 +31,7 @@ export default function CreateJobApplication() {
         referralPerson: referralEmail,
         jobLink,
       });
-      console.log(jobAdded);
+      setJobId(jobAdded.id.toString());
       toast.success(`Job added to the list of applications`);
       router.push('/viewJobApplication'  + "?" + `id=${jobAdded.id.toString()}`);
     } catch (error) {
@@ -101,6 +103,10 @@ export default function CreateJobApplication() {
         >
           Submit Application
         </button>
+        <div className='flex gap-2 my-2 text-white justify-center'>
+          <span className="">Go to existing job applications</span> 
+          <Link href={'/viewJobApplication'  + "?" + `id=${jobId}`} className="text-blue-700 hover:text-blue-500">View Applications</Link>
+        </div>
       </div>
     </div>
   );
