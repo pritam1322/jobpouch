@@ -2,7 +2,8 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
-import authOptions from "@/app/api/auth/[...nextauth]/route";
+import authOptions from "@/lib/authOptions";
+
 
 export default async function ProfileForm() {
   const session = await getServerSession(authOptions);
