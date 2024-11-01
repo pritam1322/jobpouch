@@ -58,7 +58,7 @@ export const appRouter = router({
         status: z.string(),
         appliedDate: z.string().datetime(),
         referralPerson: z.string().optional(),
-        jobLink: z.string().optional(),
+        jobLink: z.string(),
       })
     )
     .mutation(async ({ input}) => {
