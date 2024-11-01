@@ -1,5 +1,3 @@
-
-import { trpc } from "@/trpc-client/client";
 import { prisma } from "@/trpc-server/prisma";
 import { NextResponse } from "next/server";
 
@@ -51,7 +49,7 @@ export async function POST(request: Request) {
 }
 
 
-export async function GET(req: Request) {
+export async function GET() {
   // Optionally handle GET requests
   return new Response(JSON.stringify({ message: 'Webhook GET request' }), { status: 200 });
 }

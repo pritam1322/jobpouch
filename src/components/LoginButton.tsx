@@ -5,7 +5,7 @@ import {signIn} from "next-auth/react";
 
 export default function LoginButton(){
     return (
-        <div className="shadow shadow-black/100 p-1 m-2 rounded-full items-center border-b mb-4">
+        <div className="shadow shadow-black/100 text-black p-1 m-2 rounded-full items-center border-b mb-4">
             <button
                 onClick={() => signIn('google')}
                 className="flex gap-2 mx-auto items-center">

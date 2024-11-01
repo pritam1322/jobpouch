@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server';
-import argon2 from 'argon2';
 import bcrypt from "bcryptjs";
 import { prisma } from '@/trpc-server/prisma';
-import { createHash, randomBytes } from 'crypto';
 
-function hashPassword(password: string): string {
-  const salt = randomBytes(16).toString('hex'); // Generate a random salt
-  const hash = createHash('sha256').update(salt + password).digest('hex'); // Hash the salt + password
-  return `${salt}:${hash}`; // Store the salt and hash together
-}
 
 export async function POST(request: Request) {
   const body = await request.json();

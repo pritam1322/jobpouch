@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import React, { useState } from "react";
 
@@ -23,16 +23,16 @@ interface JobApplication {
 
 
 export default function ViewJobApplication() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
   const { data: session, status } = useSession();
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null); // Track the selected job
   const [newStatus, setNewStatus] = useState(""); // Track the new status
   const router = useRouter();
-  const handleClick = () => {
-    router.push('/createJobApplication'); // Programmatically navigate
-  };
+
+  if(status === 'unauthenticated'){
+    router.push('/');
+  }
+
   const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
 
   // Fetch job applications

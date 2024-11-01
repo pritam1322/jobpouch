@@ -10,11 +10,14 @@ export default function CreateJobApplication() {
   const [companyName, setCompanyName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [jobLink, setJobLink] = useState('');
-  const [jobId, setJobId] = useState('');
   const [referralEmail, setReferralEmail] = useState('');
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
   const router = useRouter();
+  
+  if(status === 'unauthenticated'){
+    router.push('/');
+  }
 
   const handleSubmit = async () => {
     if (!session?.user?.id) {
@@ -22,7 +25,7 @@ export default function CreateJobApplication() {
       return;
     }
     try {
-      const jobAdded = await createApplication.mutateAsync({
+      await createApplication.mutateAsync({
         candidateId: Number(session.user.id),
         companyName,
         jobTitle,
@@ -31,11 +34,10 @@ export default function CreateJobApplication() {
         referralPerson: referralEmail,
         jobLink,
       });
-      setJobId(jobAdded.id.toString());
       toast.success(`Job added to the list of applications`);
-      router.push('/viewJobApplication'  + "?" + `id=${jobAdded.id.toString()}`);
+      router.push('/viewJobApplication');
     } catch (error) {
-      toast.error('Error creating application');
+      toast.error(error + ' - Error creating application');
     }
   };
 
@@ -105,7 +107,7 @@ export default function CreateJobApplication() {
         </button>
         <div className='flex gap-2 my-2 text-white justify-center'>
           <span className="">Go to existing job applications</span> 
-          <Link href={'/viewJobApplication'  + "?" + `id=${jobId}`} className="text-blue-700 hover:text-blue-500">View Applications</Link>
+          <Link href={'/viewJobApplication'} className="text-blue-700 hover:text-blue-500">View Applications</Link>
         </div>
       </div>
     </div>

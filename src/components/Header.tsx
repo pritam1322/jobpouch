@@ -1,6 +1,4 @@
 'use client'; 
-import authOptions from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
@@ -16,7 +14,7 @@ export default function Header() {
                 </Link>
             </div>
             <nav className="flex gap-10">
-                {!!session && (
+                {!!session && status == 'authenticated' && (
                     <div className="flex gap-8 items-center">
                         <Link href={'/account'}>
                             Hello, {session?.user?.name}
