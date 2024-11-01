@@ -106,8 +106,8 @@ export default function CreateJobApplication() {
           Submit Application
         </button>
         <div className='flex gap-2 my-2 text-white justify-center'>
-          <span className="">Go to existing job applications</span> 
-          <Link href={'/viewJobApplication'} className="text-blue-700 hover:text-blue-500">View Applications</Link>
+          <span className="">Go to existing job applications - </span> 
+          <Link href={'/viewJobApplication'} className="text-blue-700 hover:text-blue-500">view applications</Link>
         </div>
       </div>
     </div>
