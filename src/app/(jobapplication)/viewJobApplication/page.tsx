@@ -97,7 +97,8 @@ export default function ViewJobApplication() {
 
         <div>
         <Link
-          href={'/'}
+          href={'/createJobApplication'}
+          target="_blank"
           className="border border-white p-1 rounded-md bg-white text-black font-bold hover:text-white hover:bg-black"
         >
           <span>Add job to track</span>
