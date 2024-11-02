@@ -1,4 +1,6 @@
 'use client'; 
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
@@ -8,10 +10,20 @@ export default function Header() {
     console.log(session);
     return (
         <header className="flex items-center justify-between px-10 py-4 bg-black  shadow-lg">
-            <div>
+            <div className="flex gap-16 items-center">
                 <Link href="/" className="text-3xl font-extrabold text-white hover:text-gray-200 transition-all duration-300 ease-in-out transform hover:scale-105">
                     JobPouch
                 </Link>
+                <div className="text-white flex gap-1 text-lg font-semibold items-center">
+                    <FontAwesomeIcon icon={faGithub} className="h-4" />
+                    <Link 
+                        href="https://github.com/pritam1322/jobpouch" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Github
+                    </Link>
+                </div>
             </div>
             <nav className="flex gap-10">
                 {!!session && status == 'authenticated' && (

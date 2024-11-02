@@ -27,11 +27,23 @@ export default function LoginPage() {
         }
     };
 
+    const handleAutofillEmailPassword = () => {
+        const email = "teamfree@example.com";
+        const password = "teamfree";
+        setEmail(email);
+        setPassword(password);
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">Login</h2>
                 <LoginButton />
+                <div className='rounded-lg shadow-lg bg-gray-200 text-black my-4 p-1 flex max-w-48 mx-auto'>
+                    <button onClick={handleAutofillEmailPassword} className="w-full font-semibold">
+                    Guest Login
+                    </button>
+                </div>
                 <form className="space-y-6" onSubmit={handleLogin}>
 
                    
