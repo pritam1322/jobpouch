@@ -10,7 +10,7 @@ import LogoutButton from './LogoutButton';
 const MobileNav = () => {
     const router = useRouter();
     const [showOptions, setShowOptions] = useState(false);
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
 
     const handleNavigation = (path: string) => {
         router.push(path);
