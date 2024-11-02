@@ -1,7 +1,7 @@
 'use client';
 import ViewJobApplicationFilter from "@/components/filters/ViewJobApplicationFeature";
 import { trpc } from "@/trpc-client/client";
-import { faBriefcase, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBriefcase, faCircleUp, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -56,7 +56,7 @@ export default function ViewJobApplication() {
   const handleFilter = useCallback((filteredJobs: JobApplication[]) => {
     setFilteredJobs(filteredJobs);
   }, []);
-  
+
   // Mutation to update job status
   const updateStatusMutation = trpc.updateApplicationStatus.useMutation({
     onSuccess: () => {
@@ -87,10 +87,11 @@ export default function ViewJobApplication() {
     }
   };
 
+  const activeJobs =  filteredJobs.filter(job => (job.status !== 'Accepted' && job.status !== 'Rejected'));
   
   return (
-    <section className="mt-8 mx-16">
-      <div className="flex justify-between p-4 bg-black text-white rounded-md shadow-lg">
+    <section className="mt-4 mx-16">
+      <div className="flex justify-between p-4 bg-orange-900   text-white rounded-md shadow-lg">
         <div className="flex gap-3 items-center">
           <FontAwesomeIcon icon={faBriefcase} className="h-8" />
           <h1 className="font-bold text-2xl">Applied Jobs</h1>
@@ -106,8 +107,20 @@ export default function ViewJobApplication() {
         </nav>
       </div>
 
-      {/* Add filter here */}
-      <ViewJobApplicationFilter jobArray={jobArray} onFilter={handleFilter} />
+      <div className="mt-3 max-w-60 bg-black text-green-500 px-4 py-2 rounded-lg shadow-lg flex gap-1 items-center justify-between">
+      <div>
+        <h1 className="text-xl font-bold text-white">Active Jobs</h1>
+        
+      </div>
+      
+      <div className="flex gap-2 items-center bg-gray-100 text-green-600 font-bold py-1 px-4 rounded-full shadow-md">
+        <FontAwesomeIcon icon={faCircleUp} className="h-4 hover:scale-125" />
+        <span>{activeJobs.length}</span>
+      </div>
+    </div>
+
+    {/* Add filter here */}
+    <ViewJobApplicationFilter jobArray={jobArray} onFilter={handleFilter} />
 
       <div className="grid grid-cols-1 mt-8 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
         {filteredJobs.map((job) => (

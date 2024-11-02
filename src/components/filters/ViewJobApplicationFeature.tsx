@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 interface JobApplication {
   id: number;
@@ -38,7 +39,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
   }, [searchTerm, selectedStatus, startDate, endDate, jobArray, onFilter]);
 
   return (
-    <div className="mt-4 flex gap-4 items-center bg-blue-100 p-8">
+    <div className="mt-4 flex gap-4 items-center text-gray-400 bg-blue-200 p-8">
       <div>
         <label className="block text-sm font-medium text-gray-800 mb-1">Search Filter</label>
         <input
@@ -46,7 +47,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
           placeholder="Search by job title or company name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded p-2"
+          className="border border-gray-300 rounded py-2 pr-12 pl-2"
         />
       </div>
       <div>
