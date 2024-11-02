@@ -17,74 +17,71 @@ interface ViewJobApplicationFilterProps {
 }
 
 export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJobApplicationFilterProps) {
-  const [searchTerm, setSearchTerm] = useState(''); // Track the search input for filtering
-  const [selectedStatus, setSelectedStatus] = useState(''); // Track selected status
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  // Filter logic based on search term and status
   useEffect(() => {
-    const handleFilter = () => {
-      const filtered = jobArray.filter((job) => {
-        // Check if the job matches the search term (job title or company name)
-        const matchesSearchTerm = (
-          (job.jobTitle && job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())) || 
-          (job.companyName && job.companyName.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
+    const filtered = jobArray.filter((job) => {
+      const matchesSearchTerm =
+        (job.jobTitle && job.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (job.companyName && job.companyName.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesStatus = selectedStatus ? job.status === selectedStatus : true;
+      const appliedDate = new Date(job.appliedDate);
+      const matchesStartDate = startDate ? appliedDate >= new Date(startDate) : true;
+      const matchesEndDate = endDate ? appliedDate <= new Date(endDate) : true;
+      return matchesSearchTerm && matchesStatus && matchesStartDate && matchesEndDate;
+    });
 
-        // Check if the job matches the selected status (if any)
-        const matchesStatus = selectedStatus ? job.status === selectedStatus : true;
-
-        return matchesSearchTerm && matchesStatus;
-      });
-
-      // Pass the filtered job list to the parent component
-      onFilter(filtered);
-    };
-
-    handleFilter();
-  }, [searchTerm, selectedStatus, jobArray, onFilter]);
-
-  // Handle change in search input
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
-  // Handle change in status dropdown
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedStatus(e.target.value);
-  };
+    onFilter(filtered);
+  }, [searchTerm, selectedStatus, startDate, endDate, jobArray, onFilter]);
 
   return (
     <div className="mt-4 flex gap-4 items-center bg-blue-100 p-8">
-      {/* Search input for filtering by job title or company name */}
-      <div className=''>
-        <label className="block text-sm font-medium text-gray-800 mb-1">
-          Search Filter
-        </label>
+      <div>
+        <label className="block text-sm font-medium text-gray-800 mb-1">Search Filter</label>
         <input
           type="text"
           placeholder="Search by job title or company name"
           value={searchTerm}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="border border-gray-300 rounded p-2"
         />
       </div>
-
-      {/* Dropdown for filtering by status */}
-      <div className=''>
-        <label className="block text-sm font-medium text-gray-800 mb-1 w-auto">
-          Status
-        </label>
+      <div>
+        <label className="block text-sm font-medium text-gray-800 mb-1">Status</label>
         <select
           value={selectedStatus}
-          onChange={handleStatusChange}
+          onChange={(e) => setSelectedStatus(e.target.value)}
           className="border border-gray-300 rounded p-2 font-semibold text-gray-600"
         >
           <option value="">All Statuses</option>
-          <option value="Pending">Pending</option>
+          <option value="Applied">Applied</option>
           <option value="In Progress">In Progress</option>
           <option value="Accepted">Accepted</option>
           <option value="Rejected">Rejected</option>
         </select>
+      </div>
+      <div className="flex gap-4 mt-4 p-4 items-center">
+        <div className="flex gap-2 items-center">
+          <label className="text-sm font-medium text-gray-800">Start Date:</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div className="flex gap-2 items-center">
+          <label className="text-sm font-medium text-gray-800">End Date:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border border-gray-300 rounded-md p-2"
+          />
+        </div>
       </div>
     </div>
   );

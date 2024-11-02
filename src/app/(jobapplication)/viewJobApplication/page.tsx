@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import ViewJobApplicationFilter from "@/components/filters/ViewJobApplicationFeature";
 import { trpc } from "@/trpc-client/client";
 import { faBriefcase, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 interface JobApplication {
   id: number;
@@ -28,7 +28,7 @@ export default function ViewJobApplication() {
   const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null); // Track the selected job
   const [newStatus, setNewStatus] = useState(""); // Track the new status
   const router = useRouter();
-
+  
   if(status === 'unauthenticated'){
     router.push('/');
   }
@@ -53,6 +53,9 @@ export default function ViewJobApplication() {
 
   // Move useState hook out of dynamic or conditional logic
   const [filteredJobs, setFilteredJobs] = useState<JobApplication[]>(jobArray); 
+  const handleFilter = useCallback((filteredJobs: JobApplication[]) => {
+    setFilteredJobs(filteredJobs);
+  }, []);
   
   // Mutation to update job status
   const updateStatusMutation = trpc.updateApplicationStatus.useMutation({
@@ -84,9 +87,7 @@ export default function ViewJobApplication() {
     }
   };
 
-  const handleFilter = (filteredJobs: JobApplication[]) => {
-    setFilteredJobs(filteredJobs);
-  };
+  
   return (
     <section className="mt-8 mx-16">
       <div className="flex justify-between p-4 bg-black text-white rounded-md shadow-lg">
@@ -95,15 +96,14 @@ export default function ViewJobApplication() {
           <h1 className="font-bold text-2xl">Applied Jobs</h1>
         </div>
 
-        <div>
-        <Link
-          href={'/createJobApplication'}
-          target="_blank"
-          className="border border-white p-1 rounded-md bg-white text-black font-bold hover:text-white hover:bg-black"
-        >
-          <span>Add job to track</span>
-        </Link>
-        </div>
+        <nav className="border border-white text-black font-bold hover:text-white p-1 rounded-md bg-white hover:bg-black relative">
+          <Link
+            href={'/createJobApplication'}
+            className=" "
+          >
+            Add job to track
+          </Link>
+        </nav>
       </div>
 
       {/* Add filter here */}
@@ -127,7 +127,7 @@ export default function ViewJobApplication() {
               <p className="text-lg font-medium text-gray-300 mb-1">{job.companyName}</p>
               <p className="text-sm text-gray-400">{new Date(job.appliedDate).toLocaleString()}</p>
               <p className="text-sm text-gray-400">{job.status}</p>
-              <p className="text-sm text-gray-400">Referred By - {job.referralPerson}</p>
+              <p className="text-xs text-gray-400">Referred By - {job.referralPerson}</p>
             </div>
             <button
               onClick={() =>
@@ -169,7 +169,7 @@ export default function ViewJobApplication() {
                   className="border border-black rounded mb-4 p-1.5"
                   required
                 >
-                  <option value="Pending">Pending</option>
+                  <option value="Applied">Pending</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Accepted">Accepted</option>
                   <option value="Rejected">Rejected</option>

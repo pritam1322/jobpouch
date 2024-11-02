@@ -19,7 +19,7 @@ export default function JobHeader(){
                     <span className="font-semibold">{session?.user?.name}</span>
                 </div>
                 <div className="items-center flex gap-8">
-                    <Link href={'/'} target="_blank" className="font-semibold">Home</Link>
+                    <Link href={'/'}  className="font-semibold">Home</Link>
                     <span className="font-semibold">{session?.user?.email}</span>
                 </div>
             </div>
