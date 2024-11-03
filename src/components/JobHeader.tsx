@@ -65,7 +65,7 @@ export default function JobHeader(){
                         onClick={() => handleNavigation("/viewJobApplication")}
                         className="w-full px-4 py-2 text-left hover:text-black hover:bg-white rounded-md"
                     >
-                        {session?.user?.name}'s Applications
+                        {session?.user?.name}&apos;s Applications
                     </button>
                     <button
                         onClick={() => handleNavigation("/stats")}

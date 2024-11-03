@@ -27,7 +27,7 @@ export default function IntegratedCompanies() {
             </div>
             <div className="flex gap-2 text-md">
                 <FontAwesomeIcon icon={faFaceSmileBeam} className="h-6" />
-                <span className="mb-1">It's free for now.....</span>
+                <span className="mb-1">It&apos;s free for now.....</span>
             </div>
             <section className="max-w-5xl mx-auto mt-4">
                 <div className="text-lg mt-4 text-green-400">Webhook Link</div>
