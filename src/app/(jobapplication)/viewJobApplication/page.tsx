@@ -66,7 +66,10 @@ export default function ViewJobApplication() {
   });
 
   if (isLoading) return <p>Loading applications...</p>;
-  if (error) return <p>Error loading applications: {error.message}</p>;
+  if (error){
+    router.back();
+  }
+  
 
   // Handle popup open
   const handleUpdateClick = (job: JobApplication) => {
