@@ -33,6 +33,7 @@ model JobApplication {
   appliedDate     DateTime  @default(now())
   referralPerson  String?   
   jobLink         String
+  techguid        String? 
 
   User User @relation(fields: [candidateId], references: [id])
 }

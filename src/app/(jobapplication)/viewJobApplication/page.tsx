@@ -90,11 +90,11 @@ export default function ViewJobApplication() {
   const activeJobs =  filteredJobs.filter(job => (job.status !== 'Accepted' && job.status !== 'Rejected'));
   
   return (
-    <section className="mt-4 mx-16">
-      <div className="flex justify-between p-4 bg-orange-900   text-white rounded-md shadow-lg">
+    <section className="mt-4 lg:mx-16 sm:mx-4">
+      <div className="flex sm:gap-2 sm:text-xl justify-between p-4 sm:p-2 bg-orange-900   text-white rounded-md shadow-lg">
         <div className="flex gap-3 items-center">
           <FontAwesomeIcon icon={faBriefcase} className="h-8" />
-          <h1 className="font-bold text-2xl">Applied Jobs</h1>
+          <h1 className="font-bold text-2xl sm:text-xl ">Applied Jobs</h1>
         </div>
 
         <nav className="border border-white text-black font-bold hover:text-white p-1 rounded-md bg-white hover:bg-black relative">

@@ -38,7 +38,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
   }, [searchTerm, selectedStatus, startDate, endDate, jobArray, onFilter]);
 
   return (
-    <div className="mt-4 flex gap-4 items-center text-gray-400 bg-blue-200 p-8">
+    <div className="mt-4 lg:flex lg:gap-4 items-center text-gray-400 bg-blue-200 lg:p-8 p-4 ">
       <div>
         <label className="block text-sm font-medium text-gray-800 mb-1">Search Filter</label>
         <input
@@ -63,8 +63,8 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
           <option value="Rejected">Rejected</option>
         </select>
       </div>
-      <div className="flex gap-4 mt-4 p-4 items-center">
-        <div className="flex gap-2 items-center">
+      <div className="lg:flex lg:gap-4 mt-4 lg:p-4 items-center">
+        <div className="flex gap-2 items-center my-2">
           <label className="text-sm font-medium text-gray-800">Start Date:</label>
           <input
             type="date"

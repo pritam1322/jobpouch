@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginButton from '@/components/LoginButton';
+import toast from 'react-hot-toast';
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ export default function LoginPage() {
     
         if (result?.error) {
         console.error(result.error); // Handle error
+        toast.error('Wrong Creds');
         } else {
         router.push('/'); 
         }

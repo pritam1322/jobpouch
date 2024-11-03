@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function CreateJobApplication() {
   const [companyName, setCompanyName] = useState('');
@@ -24,6 +25,9 @@ export default function CreateJobApplication() {
       alert('You must be logged in to create a job application.');
       return;
     }
+
+    const techguid = uuidv4();
+
     try {
       await createApplication.mutateAsync({
         candidateId: Number(session.user.id),
@@ -33,6 +37,7 @@ export default function CreateJobApplication() {
         appliedDate: new Date().toISOString(),
         referralPerson: referralEmail,
         jobLink,
+        techguid,
       });
       toast.success(`Job added to the list of applications`);
       router.push('/viewJobApplication');
