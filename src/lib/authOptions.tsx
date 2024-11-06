@@ -33,6 +33,10 @@ const authOptions : NextAuthOptions = {
         }
         const password = credentials?.password;
 
+        if(!password){
+          throw new Error("Password required.");
+        }
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
