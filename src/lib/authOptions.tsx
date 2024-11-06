@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/trpc-server/prisma';
 import bcrypt from "bcryptjs";
+import { getUserById } from '@/trpc-server/user';
 
 interface User {
   id: string;
@@ -13,6 +14,7 @@ interface User {
 }
 
 const authOptions : NextAuthOptions = {
+  debug: true,
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -56,6 +58,13 @@ const authOptions : NextAuthOptions = {
     strategy: 'jwt', // Make sure the strategy is correctly set (default is 'jwt')
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
+
+      await getUserById(Number(user.id));
+
+      return true;
+    },
     async jwt({ token, user }) {
       // When the user is returned from authorize, store user info in the token
       if (user) {

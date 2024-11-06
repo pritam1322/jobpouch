@@ -7,7 +7,7 @@ export default function LoginButton(){
     return (
         <div className="shadow shadow-black/100 text-black p-1 m-2 rounded-full items-center border-b mb-4">
             <button
-                onClick={() => signIn('google')}
+                onClick={() => signIn('google', { callbackUrl: "/" })}
                 className="flex gap-2 mx-auto items-center">
                 <FontAwesomeIcon icon={faGoogle} className="h-5"/>
                 <span className="text-center text-sm">Continue with Google</span>
