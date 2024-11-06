@@ -93,7 +93,7 @@ export default function ViewJobApplication() {
   const activeJobs =  filteredJobs.filter(job => (job.status !== 'Accepted' && job.status !== 'Rejected'));
   
   return (
-    <section className="mt-4 lg:mx-16 sm:mx-4">
+    <section className="my-4 lg:mx-16 sm:mx-4">
       <div className="flex sm:gap-2 sm:text-xl justify-between p-4 sm:p-2 bg-orange-900   text-white rounded-md shadow-lg">
         <div className="flex gap-3 items-center">
           <FontAwesomeIcon icon={faBriefcase} className="h-8" />
@@ -125,7 +125,7 @@ export default function ViewJobApplication() {
     {/* Add filter here */}
     <ViewJobApplicationFilter jobArray={jobArray} onFilter={handleFilter} />
 
-      <div className="grid grid-cols-1 mt-8 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+      <div className="grid grid-cols-1 mt-8 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2">
         {filteredJobs.map((job) => (
           <div
             key={job.id}
