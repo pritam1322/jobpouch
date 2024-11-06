@@ -33,10 +33,6 @@ const authOptions : NextAuthOptions = {
         }
         const password = credentials?.password;
 
-        if(!password){
-          throw new Error("Password required.");
-        }
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
@@ -46,7 +42,7 @@ const authOptions : NextAuthOptions = {
           return null;
         }
 
-        const isvalid = bcrypt.compareSync(password, user.password);
+        const isvalid = user.password && bcrypt.compareSync(password, user.password);
 
         // Directly compare the plaintext passwords
         if (!isvalid) {
