@@ -33,7 +33,7 @@ export default function ForgotPassword() {
         toast.error("Email not found");
       }
     } catch (error) {
-      toast.error("An error occurred");
+      toast.error("An error occurred - " + error);
     }
   };
 
