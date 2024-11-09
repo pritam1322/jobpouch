@@ -26,7 +26,7 @@ export default async function SendMail(email : string, token: string){
 
     if (user) {
     // sending email with nodemailer
-        const info = await transporter.sendMail({
+        await transporter.sendMail({
         from: '"Pritam" <pritamjat98@gmail.com>', // sender address
         to: email,
         subject: `Reset your password`, // Subject line

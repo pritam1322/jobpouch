@@ -15,7 +15,7 @@ export async function POST(request : Request,){
     const resetToken = generateResetToken();
     const expires = new Date(Date.now() + 3600000); // 1-hour expiration
     console.log(resetToken);
-    const pass = await prisma.passwordResetToken.create({
+    await prisma.passwordResetToken.create({
         data: {
           email,
           token: resetToken,
