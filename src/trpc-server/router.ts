@@ -92,6 +92,18 @@ export const appRouter = router({
         data: { status: input.status },
       });
     }),
+    updateUserPassword: publicProcedure.input(
+      z.object({
+        email: z.string(),
+        password: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return prisma.user.update({
+        where: { email: input.email},
+        data: { password : input.password },
+      })
+    })
 });
 
 export type AppRouter = typeof appRouter;

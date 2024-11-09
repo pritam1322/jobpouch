@@ -4,6 +4,7 @@ import Link from 'next/link';
 import bcrypt from "bcryptjs";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import LoginButton from '@/components/LoginButton';
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -40,7 +41,7 @@ export default function RegisterPage() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">Sign up to JobPouch</h2>
-                
+                <LoginButton />
                 <form className="space-y-6" onSubmit={handleSignUp}>
 
                     <div>
