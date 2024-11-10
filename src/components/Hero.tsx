@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import Title from "./ui/Title";
 
 export default function Hero() {
   return (

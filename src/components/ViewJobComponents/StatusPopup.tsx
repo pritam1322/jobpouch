@@ -22,7 +22,7 @@ interface StatusPopupProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
-const StatusPopup: React.FC<StatusPopupProps> = ({ selectedJob, newStatus, setNewStatus, onClose, onSubmit }) => (
+const StatusPopup: React.FC<StatusPopupProps> = ({ newStatus, setNewStatus, onClose, onSubmit }) => (
   <>
     <div className="fixed inset-0 bg-black bg-opacity-50 z-10" onClick={onClose}></div>
     <div className="fixed top-10 left-1/2 w-1/2 h-3/4 transform -translate-x-1/2 bg-white border rounded shadow-2xl z-20">
