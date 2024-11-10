@@ -38,23 +38,23 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
   }, [searchTerm, selectedStatus, startDate, endDate, jobArray, onFilter]);
 
   return (
-    <div className="mt-4 lg:flex lg:gap-4 items-center text-gray-400 bg-blue-200 lg:p-8 p-4 ">
+    <div className="mt-4 lg:flex lg:gap-4 items-center rounded-md text-gray-100 bg-cyan-700 lg:px-8 lg:py-2 p-4 ">
       <div>
-        <label className="block text-sm font-medium text-gray-800 mb-1">Search Filter</label>
+        <label className="block text-sm mb-1 font-bold">Search Filter</label>
         <input
           type="text"
           placeholder="Search by job title or company name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded py-2 pr-12 pl-2"
+          className="input input-bordered"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-800 mb-1">Status</label>
+        <label className="block text-sm font-medium mb-1">Status</label>
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
-          className="border border-gray-300 rounded p-2 font-semibold text-gray-600"
+          className="select select-bordered"
         >
           <option value="">All Statuses</option>
           <option value="Applied">Applied</option>
@@ -63,23 +63,23 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
           <option value="Rejected">Rejected</option>
         </select>
       </div>
-      <div className="lg:flex lg:gap-4 mt-4 lg:p-4 items-center">
-        <div className="flex gap-2 items-center my-2">
-          <label className="text-sm font-medium text-gray-800">Start Date:</label>
+      <div className="lg:flex lg:gap-4  lg:p-4 items-center">
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Start Date:</label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border border-gray-300 rounded-md p-2"
+            className="input input-bordered"
           />
         </div>
-        <div className="flex gap-2 items-center">
-          <label className="text-sm font-medium text-gray-800">End Date:</label>
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">End Date:</label>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border border-gray-300 rounded-md p-2"
+            className="input input-bordered"
           />
         </div>
       </div>

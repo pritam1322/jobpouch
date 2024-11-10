@@ -1,5 +1,5 @@
 'use client';
-import { faAddressCard, faChartSimple, faFile, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faChartSimple, faFile, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import React, { useState } from 'react';
@@ -22,29 +22,28 @@ export default function JobHeader(){
 
     return (
         <header>
-            <div className="flex justify-between bg-black py-4 text-white px-8 items-center">
+            <div className="flex justify-between text-gray-300 bg-neutral-800 pt-4 pb-2 shadow-md shadow-white/5 px-8 items-center">
                 {/* Left Section - Main Links */}
                 <div className="flex gap-8 items-center">
-                    <div className="items-center flex gap-4">
-                        <FontAwesomeIcon icon={faAddressCard} className="h-8" />
-                        <Link href={'/viewJobApplication'} className="font-semibold hidden sm:inline">
+                    <div className="items-center flex gap-2 hover:bg-neutral-600 p-2 rounded-md">
+                        {/* <FontAwesomeIcon icon={faAddressCard} className="h-8" /> */}
+                        <Link href={'/viewJobApplication'} className="font-bold  hidden sm:inline">
                             {session?.user?.name}
                         </Link>
                     </div>
-                    <div className="items-center flex gap-1 hidden sm:flex">
-                        <FontAwesomeIcon icon={faChartSimple} className="h-5" />
-                        <Link href={'/stats'} className="hover:text-gray-400 text-md font-semibold">Statistics</Link>
+                    <div className="items-center  gap-1 hidden sm:flex hover:bg-neutral-600 p-2  rounded-md">
+                        {/* <FontAwesomeIcon icon={faChartSimple} className="h-5" /> */}
+                        <Link href={'/stats'} className="text-md font-semibold">Statistics</Link>
                     </div>
-                    <div className="items-center flex gap-1 hidden sm:flex">
-                        <FontAwesomeIcon icon={faFile} className="h-5" />
-                        <Link href={'/resume'} className="hover:text-gray-400 text-md font-semibold">Resume</Link>
+                    <div className="items-center gap-1 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
+                        {/* <FontAwesomeIcon icon={faFile} className="h-5" /> */}
+                        <Link href={'/resume'} className="text-md font-semibold">Resume</Link>
                     </div>
                 </div>
 
                 {/* Right Section - Home and Email */}
-                <div className="items-center gap-8 hidden sm:flex">
+                <div className="items-center gap-8 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
                     <Link href={'/'} className="font-semibold">Home</Link>
-                    <span className="font-semibold">{session?.user?.email}</span>
                 </div>
 
                 {/* Mobile Menu Icon */}
@@ -54,7 +53,7 @@ export default function JobHeader(){
                     onClick={() => setShowOptions(!showOptions)}
                     className="sm:hidden focus:outline-none"
                 >
-                    <FontAwesomeIcon icon={faBars} className="h-6 w-6 text-white" />
+                    <FontAwesomeIcon icon={faBars} className="h-6 w-6 text-black" />
                 </button>
             </div>
 
