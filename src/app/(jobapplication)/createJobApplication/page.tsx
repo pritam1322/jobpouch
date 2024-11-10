@@ -48,7 +48,7 @@ export default function CreateJobApplication() {
 
   return (
     <div className="min-h-screen mt-12 flex flex-col justify-center items-center">
-      <div className="bg-black p-8 rounded-lg shadow-md max-w-lg w-full">
+      <div className="bg-neutral-900 p-8 rounded-lg shadow-md max-w-lg w-full">
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
           Create New Job Application
         </h1>

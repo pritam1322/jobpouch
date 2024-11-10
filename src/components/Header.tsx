@@ -11,7 +11,7 @@ export default function Header() {
     console.log(session);
 
     return (
-        <header className="flex items-center justify-between px-10 py-4 bg-black shadow-lg">
+        <header className="flex items-center justify-between px-10 py-4 bg-neutral-900 shadow-lg">
             <div className="flex gap-16 items-center">
                 <Link 
                     href="/" 

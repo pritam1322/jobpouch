@@ -1,31 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
+import Title from "./ui/Title";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col-reverse lg:flex-row gap-16 lg:gap-16 items-center justify-between px-8 py-16 lg:py-16">
-      {/* Text Section */}
-      <div className=" max-w-xl">
-        <h1 className="text-4xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
-          Find, Track<br /> and Land Your Dream Job
+    <section className="flex lg:flex-col  gap-16 lg:gap-16 items-center justify-between px-8 py-16 lg:py-16">
+
+      {/* <Title /> */}
+
+      <div className=" max-w-6xl text-center">
+        <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
+          Find, Track and Land Your Dream Job
         </h1>
-        <p className="text-lg lg:text-xl text-gray-200 mb-6">
+        <p className="text-lg lg:text-xl text-gray-200 mb-10">
           Stay ahead in your job search with real-time tracking and personalized application management.
         </p>
-        <Link href={'/createJobApplication'} className="px-6 py-3 mt-4 bg-white text-indigo-700 font-semibold text-lg rounded-full shadow-lg hover:bg-indigo-100 transition duration-300 ease-in-out">
+        <Link href={'/createJobApplication'} className="w-full lg:w-auto px-28 py-3 mt-8 bg-orange-700 text-white font-semibold text-lg rounded-md shadow-lg hover:bg-orange-800 transition duration-300 ease-in-out text-center">
           Get Started
         </Link>
-      </div>
-
-      {/* Image Section */}
-      <div className="flex-shrink-0">
-        <Image
-          src="/image.jpg"
-          alt="Find your dream job"
-          width={450}
-          height={450}
-          className="rounded-lg border-4 border-white shadow-xl"
-        />
       </div>
     </section>
   );
