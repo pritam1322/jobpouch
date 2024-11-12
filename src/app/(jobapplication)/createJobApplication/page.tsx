@@ -62,7 +62,7 @@ export default function CreateJobApplication() {
             placeholder="Enter company name"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
@@ -75,7 +75,7 @@ export default function CreateJobApplication() {
             placeholder="Enter job title"
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
@@ -88,7 +88,7 @@ export default function CreateJobApplication() {
             placeholder="Enter email id of the person who referred you"
             value={referralEmail}
             onChange={(e) => setReferralEmail(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
@@ -101,7 +101,7 @@ export default function CreateJobApplication() {
             placeholder="Enter job link"
             value={jobLink}
             onChange={(e) => setJobLink(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <button

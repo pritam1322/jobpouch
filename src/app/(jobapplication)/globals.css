@@ -6,3 +6,8 @@
 body {
     @apply bg-neutral-800 ; 
 }
+
+option {
+    @apply text-neutral-800;
+}
+

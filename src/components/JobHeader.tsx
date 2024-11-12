@@ -22,7 +22,7 @@ export default function JobHeader(){
 
     return (
         <header>
-            <div className="flex justify-between text-gray-300 bg-neutral-800 pt-4 pb-2 shadow-md shadow-white/5 px-8 items-center">
+            <div className="flex justify-between text-gray-300 bg-neutral-800 pt-4 pb-2 px-8 items-center">
                 {/* Left Section - Main Links */}
                 <div className="flex gap-8 items-center">
                     <div className="items-center flex gap-2 hover:bg-neutral-600 p-2 rounded-md">
