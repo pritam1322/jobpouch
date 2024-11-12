@@ -46,7 +46,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
           placeholder="Search by job title or company name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="input input-bordered"
+          className="input input-bordered bg-neutral-900"
         />
       </div>
       <div>
@@ -54,7 +54,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
-          className="select select-bordered"
+          className="select select-bordered bg-neutral-900"
         >
           <option value="">All Statuses</option>
           <option value="Applied">Applied</option>
@@ -70,7 +70,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="input input-bordered"
+            className="input input-bordered bg-neutral-900"
           />
         </div>
         <div className="flex flex-col">
@@ -79,7 +79,7 @@ export default function ViewJobApplicationFilter({ jobArray, onFilter }: ViewJob
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="input input-bordered"
+            className="input input-bordered bg-neutral-900"
           />
         </div>
       </div>

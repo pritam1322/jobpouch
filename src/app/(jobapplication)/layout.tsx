@@ -18,7 +18,7 @@ export default function JobLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="pb-10">
         <SessionWrapper >
           <Provider>
             <Toaster />

@@ -20,12 +20,12 @@ interface JobApplicationTableProps {
 }
 
 const JobApplicationTable: React.FC<JobApplicationTableProps> = ({ jobs, onStatusUpdate }) => (
-  <div className="my-16 ">
+  <div className="my-16 text-gray-400 ">
     <table className="table w-full">
       <thead>
-        <tr>
+        <tr className="text-gray-400">
           <th>
-            <label><input type="checkbox" className="checkbox" /></label>
+            <label></label>
           </th>
           <th>Job Title</th>
           <th>Company</th>
@@ -36,10 +36,10 @@ const JobApplicationTable: React.FC<JobApplicationTableProps> = ({ jobs, onStatu
         </tr>
       </thead>
       <tbody>
-        {jobs.map((job) => (
+        {jobs.map((job, index) => (
           <tr key={job.id}>
-            <th><label><input type="checkbox" className="checkbox" /></label></th>
-            <td>
+            <th>{index+1}</th>
+            <td className="w-80">
               <Link href={job.jobLink ?? "#"} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-400 hover:text-blue-700">
                 {job.jobTitle}
               </Link>

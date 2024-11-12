@@ -45,7 +45,7 @@ export default function RegisterPage() {
                 <form className="space-y-6" onSubmit={handleSignUp}>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
                             Name
                         </label>
                         <input
@@ -54,7 +54,7 @@ export default function RegisterPage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="mt-1 w-full px-3 py-2 border text-black bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="Pritam Jathar"
                         />
                     </div>
@@ -69,7 +69,7 @@ export default function RegisterPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="mt-1 w-full px-3 py-2 border text-black bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="you@example.com"
                         />
                     </div>
@@ -84,24 +84,15 @@ export default function RegisterPage() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="mt-1 w-full px-3 py-2 border text-black border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="mt-1 w-full px-3 py-2 border text-black bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="••••••••"
                         />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <input
-                                id="remember-me"
-                                type="checkbox"
-                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                            />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                Remember me
-                            </label>
-                        </div>
+                    <div className="flex items-center justify-end">
+                        
                         <div className="text-sm">
-                            <Link href="/forgot-password" className="text-indigo-600 hover:text-indigo-500">
+                            <Link href="/forgot-password" className="text-indigo-500 hover:text-indigo-500 font-semibold">
                                 Forgot your password?
                             </Link>
                         </div>
