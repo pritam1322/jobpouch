@@ -13,6 +13,7 @@ import {
   ArcElement, // Import ArcElement
 } from 'chart.js';
 import { useRouter } from 'next/navigation';
+import StatsJobCount from '@/components/ui/StatsJobCount';
 
 // Register the required components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -75,8 +76,12 @@ const DataAnalysis = () => {
 
   return (
     <section>
+      <h1 className='font-semibold m-4 text-gray-100'>Job Application Data Analysis</h1>
+
+      <StatsJobCount />
+
       <div className='max-w-3xl ml-8 mt-8'>
-        <h1 className='font-semibold'>Job Application Data Analysis</h1>
+        
         {statusChartData.labels.length > 0 ? (
           <Bar data={statusChartData} />
         ) : (

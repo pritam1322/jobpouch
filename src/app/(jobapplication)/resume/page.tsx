@@ -1,4 +1,9 @@
 'use client';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import React, { useState } from 'react';
 
 interface ResumeFile {
@@ -34,24 +39,18 @@ export default function Resume() {
 
     return (
         <section>
-            <div className="max-w-5xl mx-auto my-16">
-                <h1 className="text-4xl font-bold">Resume</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="my-4">
-                        <label htmlFor="version" className="block text-sm font-medium text-gray-700">
-                            Resume Version
-                        </label>
-                        <input
-                            type="text"
-                            id="version"
-                            value={version}
-                            onChange={handleVersionChange}
-                            className="block w-full my-1 px-3 py-2 text-sm border border-gray-300 rounded-md bg-white"
-                            required
-                        />
+            <div className="max-w-5xl mx-auto my-8 pb-24">
+                <div className='btn btn-active bg-bgcolor text-gray-400 hover:bg-btncolor border border-bgcolor hover:border-btncolor  my-2'>
+                    <FontAwesomeIcon icon={faBolt} className="h-6 text-orange-500" />
+                    <h1 className="">Resume</h1>
+                </div>
+                <form onSubmit={handleSubmit} className="bg-bgcolor p-8 rounded-md">
+                    <div className="grid w-full max-w-lg items-center gap-1.5">
+                        <Label htmlFor="resumeTitle" className='text-gray-200 my-1'>Title</Label>
+                        <Input type="text" id="resumeTitle" className='bg-neutral-900 text-gray-100 '/>
                     </div>
-                    <div className="my-4">
-                        <label htmlFor="resume" className="block text-sm font-medium text-gray-700">
+                    <div className="mt-4 mb-8">
+                        <label htmlFor="resume" className="block text-sm font-medium my-2 text-gray-400">
                             Upload your latest resume
                         </label>
                         <input
@@ -59,7 +58,7 @@ export default function Resume() {
                             id="resume"
                             name="resume"
                             onChange={handleFileChange}
-                            className="block w-full my-1 px-3 py-2 text-sm border border-gray-300 rounded-md bg-white"
+                            className="file-input file-input-bordered file-input-primary w-full max-w-lg bg-neutral-900 text-gray-100"
                             required
                         />
                     </div>
@@ -68,18 +67,7 @@ export default function Resume() {
                     </button>
                 </form>
 
-                {/* Display uploaded resumes */}
-                <div className="mt-8">
-                    <h2 className="text-2xl font-bold">Uploaded Resumes</h2>
-                    <ul className="mt-4 space-y-2">
-                        {resumes.map((resume, index) => (
-                            <li key={index} className="flex items-center justify-between p-2 border rounded-md">
-                                <span>{resume.version}</span>
-                                <span>{resume.file?.name}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+               
             </div>
             <div className="text-center">Development in progress</div>
         </section>
