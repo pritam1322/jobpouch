@@ -22,10 +22,6 @@ export default function Resume() {
         }
     };
 
-    const handleVersionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setVersion(e.target.value);
-    };
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
