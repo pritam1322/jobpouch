@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Provider } from "@/lib/reactQuery-provider";
 import JobHeader from "@/components/JobHeader";
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,13 +18,14 @@ export default function JobLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-neutral-800">
       <body className="pb-10">
         <SessionWrapper >
           <Provider>
             <Toaster />
             <JobHeader />
             {children}
+            <Analytics />
           </Provider>
         </SessionWrapper>
       </body>
