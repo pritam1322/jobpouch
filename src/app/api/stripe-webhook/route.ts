@@ -4,39 +4,11 @@ import { prisma } from '@/trpc-server/prisma';
 import { headers } from 'next/headers';
 import stripe from '@/lib/stripe';
 
-export const config = {
-  api: {
-    bodyParser: false, // Ensure body parsing is disabled for Stripe webhooks
-  },
-};
-
-
-async function buffer(request: Request): Promise<Buffer> {
-  const chunks: Uint8Array[] = [];
-  const reader = request.body?.getReader();
-
-  if (!reader) {
-    throw new Error('Request body is not readable');
-  }
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value!);
-  }
-
-  return Buffer.concat(chunks);
-}
-
-type METADATA = {
-  userId: string;
-  priceId: string;
-};
 
 
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  const rawBody = await buffer(request);
+  const rawBody = await request.text();
   const sig = headers().get('stripe-signature');
   //console.log(rawBody.toString());
   //console.log(sig);
