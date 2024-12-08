@@ -13,7 +13,7 @@ export default function Hero() {
         <p className="text-lg lg:text-xl text-gray-200 mb-10">
           Stay ahead in your job search with real-time tracking and personalized application management.
         </p>
-        <Link href={'/createJobApplication'} className="w-full lg:w-auto px-28 py-3 mt-8 bg-orange-700 text-white font-semibold text-lg rounded-md shadow-lg hover:bg-orange-800 transition duration-300 ease-in-out text-center">
+        <Link href={'/viewJobApplication'} className="w-full lg:w-auto px-28 py-3 mt-8 bg-orange-700 text-white font-semibold text-lg rounded-md shadow-lg hover:bg-orange-800 transition duration-300 ease-in-out text-center">
           Get Started
         </Link>
       </div>

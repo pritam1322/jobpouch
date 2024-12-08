@@ -5,7 +5,7 @@ import IntegratedCompanies from "@/components/IntegratedCompanies";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="bg-neutral-900">
       <div className="max-w-5xl mx-auto my-24">
         <Hero />
       </div>

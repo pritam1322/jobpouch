@@ -15,6 +15,19 @@ export default function CreateJobApplication() {
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
   const router = useRouter();
+
+  const { data: user } = trpc.getUserByEmail.useQuery(
+    { email: session?.user?.email as string }, 
+    { enabled: !!session?.user?.email }
+  );
+
+  const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
+
+  // Fetch job applications
+  const { data: jobs } = trpc.getApplication.useQuery(
+    { where: { candidateId: candidateId ?? 0 } },
+    { enabled: !!candidateId }
+  );
   
   if(status === 'unauthenticated'){
     router.push('/');
@@ -23,6 +36,15 @@ export default function CreateJobApplication() {
   const handleSubmit = async () => {
     if (!session?.user?.id) {
       alert('You must be logged in to create a job application.');
+      return;
+    }
+   
+    if(user?.subscriptionPlan === 'Essential' && jobs?.length === 15){
+      toast.error('You have reached the maximum number of applications for your subscription plan.');
+      return;
+    }
+    if(user?.subscriptionPlan === 'Premium' && jobs?.length === 30){
+      toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
 

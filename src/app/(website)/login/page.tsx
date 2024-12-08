@@ -1,7 +1,7 @@
 "use client"; 
 
 import Link from 'next/link';  
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginButton from '@/components/LoginButton';
@@ -11,6 +11,12 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const { data: session} = useSession();
+
+    if(session?.user){
+        router.push('/');
+        return null;
+    }
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
