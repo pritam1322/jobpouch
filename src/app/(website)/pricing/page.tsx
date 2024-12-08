@@ -6,9 +6,7 @@
   import { useSession } from "next-auth/react";
   import { useRouter } from "next/navigation";
   import toast from "react-hot-toast";
-  import { useState } from 'react';
   import { trpc } from "@/trpc-client/client";
-import { prisma } from "@/trpc-server/prisma";
 
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 

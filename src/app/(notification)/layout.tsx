@@ -1,10 +1,8 @@
 
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Provider } from "@/lib/reactQuery-provider";
-import JobHeader from "@/components/JobHeader";
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
@@ -22,7 +20,6 @@ export default function NotiLayout({
       <body className="pb-10">
         <SessionWrapper >
           <Provider>
-            
             {children}
             <Analytics />
           </Provider>

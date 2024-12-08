@@ -1,7 +1,5 @@
 'use client';
 import { trpc } from '@/trpc-client/client';
-import { faCircleUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
