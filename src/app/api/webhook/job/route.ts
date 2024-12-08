@@ -1,5 +1,7 @@
+import { trpc } from "@/trpc-client/client";
 import { prisma } from "@/trpc-server/prisma";
 import { NextResponse } from "next/server";
+import toast from "react-hot-toast";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: Request) {
@@ -15,6 +17,26 @@ export async function POST(request: Request) {
   const candidate = await prisma.user.findUnique({
     where: { email },
   });
+  if (!candidate) {
+    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
+  }
+  const candidateId = candidate.id ? candidate.id : undefined;
+
+    // Fetch job applications
+    const { data: jobs } = trpc.getApplication.useQuery(
+      { where: { candidateId } }, // Pass the actual candidateId
+      { enabled: Boolean(candidateId) } // Only enable query if candidateId is truthy
+    );
+    
+
+  if(candidate?.subscriptionPlan === 'Essential' && jobs?.length === 15){
+    toast.error('You have reached the maximum number of applications for your subscription plan.');
+    return;
+  }
+  if(candidate?.subscriptionPlan === 'Premium' && jobs?.length === 30){
+    toast.error('You have reached the maximum number of applications for your subscription plan.');
+    return;
+  }
 
 
   // Validate incoming data
@@ -72,13 +94,30 @@ export async function PUT(request: Request) {
     where: { email },
   });
 
+  if (!candidate) {
+    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
+  }
+  const candidateId = candidate.id ? candidate.id : undefined;
+
+    // Fetch job applications
+    const { data: jobs } = trpc.getApplication.useQuery(
+      { where: { candidateId } }, // Pass the actual candidateId
+      { enabled: Boolean(candidateId) } // Only enable query if candidateId is truthy
+    );
+    
+
+  if(candidate?.subscriptionPlan === 'Essential' && jobs?.length === 15){
+    toast.error('You have reached the maximum number of applications for your subscription plan.');
+    return;
+  }
+  if(candidate?.subscriptionPlan === 'Premium' && jobs?.length === 30){
+    toast.error('You have reached the maximum number of applications for your subscription plan.');
+    return;
+  }
+
   // Validate incoming data
   if (!status || !techguid) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-  }
-
-  if (!candidate) {
-    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 
   try {

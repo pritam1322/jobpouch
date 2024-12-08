@@ -5,12 +5,19 @@ import bcrypt from "bcryptjs";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginButton from '@/components/LoginButton';
+import { useSession } from 'next-auth/react';
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const { data: session} = useSession();
+
+    if(session?.user){
+        router.push('/');
+        return null;
+    }
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();

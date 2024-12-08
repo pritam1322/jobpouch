@@ -1,5 +1,6 @@
 'use client';
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faIndianRupeeSign } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -27,6 +28,14 @@ export default function Header() {
                         rel="noopener noreferrer"
                     >
                         Github
+                    </Link>
+                </div>
+                <div className="text-white flex gap-1 text-lg font-semibold items-center hover:scale-105">
+                    <FontAwesomeIcon icon={faIndianRupeeSign} className="h-4" />
+                    <Link 
+                        href="/pricing"
+                    >
+                        Pricing
                     </Link>
                 </div>
             </div>

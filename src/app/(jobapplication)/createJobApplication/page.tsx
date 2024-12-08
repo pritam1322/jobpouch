@@ -1,5 +1,7 @@
 'use client';
 import { trpc } from '@/trpc-client/client';
+import { faCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,6 +17,19 @@ export default function CreateJobApplication() {
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
   const router = useRouter();
+
+  const { data: user } = trpc.getUserByEmail.useQuery(
+    { email: session?.user?.email as string }, 
+    { enabled: !!session?.user?.email }
+  );
+
+  const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
+
+  // Fetch job applications
+  const { data: jobs } = trpc.getApplication.useQuery(
+    { where: { candidateId: candidateId ?? 0 } },
+    { enabled: !!candidateId }
+  );
   
   if(status === 'unauthenticated'){
     router.push('/');
@@ -23,6 +38,15 @@ export default function CreateJobApplication() {
   const handleSubmit = async () => {
     if (!session?.user?.id) {
       alert('You must be logged in to create a job application.');
+      return;
+    }
+   
+    if(user?.subscriptionPlan === 'Essential' && jobs?.length === 15){
+      toast.error('You have reached the maximum number of applications for your subscription plan.');
+      return;
+    }
+    if(user?.subscriptionPlan === 'Premium' && jobs?.length === 30){
+      toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
 
@@ -47,7 +71,7 @@ export default function CreateJobApplication() {
   };
 
   return (
-    <div className="min-h-screen mt-12 flex flex-col justify-center items-center">
+    <div className="min-h-screen mt-12 flex justify-center items-center">
       <div className="bg-neutral-900 p-8 rounded-lg shadow-md max-w-lg w-full">
         <h1 className="text-3xl font-bold text-white mb-6 text-center">
           Create New Job Application
