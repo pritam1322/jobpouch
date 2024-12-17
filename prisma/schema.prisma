@@ -20,6 +20,7 @@ model User {
   name                 String?
   image                String?
   emailVerified        DateTime?        @map(name: "email_verified")
+  userType             String? 
   stripeCustomerId     String?          @unique
   stripeSubscriptionId String?
   subscriptionStatus   String?
@@ -27,7 +28,7 @@ model User {
   applications         JobApplication[] // Relation to JobApplication
   Account              Account[]
   Subscription         SubscriptionDetails[]
-
+  Skills               Skill[]
   @@map("candidates") // Maps this model to the 'candidates' table in the database
 }
 
@@ -82,4 +83,12 @@ model SubscriptionDetails {
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
   user                 User      @relation(fields: [userId], references: [id])
+}
+
+model Skill {
+  id              Int    @id @default(autoincrement())
+  userId          Int
+  skills          String
+
+  User User @relation(fields: [userId], references: [id]) // Relation to User model
 }

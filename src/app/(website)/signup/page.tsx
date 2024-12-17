@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 export default function RegisterPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [selectedType, setSelectedType] = useState('Candidate');
     const [password, setPassword] = useState("");
     const router = useRouter();
     const { data: session} = useSession();
@@ -46,7 +47,7 @@ export default function RegisterPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full my-8">
                 <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">Sign up to JobPouch</h2>
                 <LoginButton />
                 <form className="space-y-6" onSubmit={handleSignUp}>
@@ -94,6 +95,20 @@ export default function RegisterPage() {
                             className="mt-1 w-full px-3 py-2 border text-black bg-gray-100 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="••••••••"
                         />
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                            Select Type
+                        </label>
+                        <select
+                            value={selectedType}
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            className="select select-bordered mt-1 w-full px-3 py-2 border text-gray-700 bg-gray-100 border-gray-300 rounded-lg shadow-sm"
+                            >
+                            <option value="Recuiter">Recuiter</option>
+                            <option value="Candidate">Candidate</option>
+                        </select>
                     </div>
 
                     <div className="flex items-center justify-end">

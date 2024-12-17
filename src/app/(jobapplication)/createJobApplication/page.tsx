@@ -38,7 +38,10 @@ export default function CreateJobApplication() {
       alert('You must be logged in to create a job application.');
       return;
     }
-   
+    if(user?.subscriptionPlan === '' && jobs?.length === 5){
+      toast.error('You have reached the maximum number of applications for your subscription plan.');
+      return;
+    }
     if(user?.subscriptionPlan === 'Essential' && jobs?.length === 15){
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;

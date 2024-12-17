@@ -42,8 +42,14 @@ export default function JobHeader(){
                 </div>
 
                 {/* Right Section - Home and Email */}
-                <div className="items-center gap-8 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
-                    <Link href={'/'} className="font-semibold">Home</Link>
+                <div className="flex gap-8 items-center">
+                    <div className="items-center gap-8 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
+                        <Link href={'/'} className="font-semibold">Home</Link>
+                    </div>
+
+                    <div className="items-center gap-8 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
+                        <Link href={'/skills'} className="font-semibold">Skills</Link>
+                    </div>
                 </div>
 
                 {/* Mobile Menu Icon */}
