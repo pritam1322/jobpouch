@@ -103,7 +103,113 @@ export const appRouter = router({
         where: { email: input.email},
         data: { password : input.password },
       })
+    }),
+
+    createTemplates: publicProcedure
+  .input(
+    z.object({
+      name: z.string(),
+      emailtemplate: z.string(),
+      linkedintemplate: z.string(),
+      userId: z.number(),
     })
+  )
+  .mutation(async ({ input }) => {
+    const template = await prisma.emailTemplate.upsert({
+      where: {
+        userId: input.userId, // Use a unique identifier to find the record
+      },
+      update: {
+        name: input.name,
+        emailtemplate: input.emailtemplate,
+        linkedintemplate: input.linkedintemplate,
+      },
+      create: {
+        name: input.name,
+        emailtemplate: input.emailtemplate,
+        linkedintemplate: input.linkedintemplate,
+        userId: input.userId,
+      },
+    });
+    return template;
+  }),
+
+
+    getEmailTemplate: publicProcedure
+    .input(
+      z.object({
+        userId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { userId } = input;
+  
+      if (!userId) {
+        throw new Error("user Id not provided");
+      }
+  
+      const user = await prisma.emailTemplate.findUnique({
+        where: {
+          userId
+        },
+      });
+  
+      if (!user) {
+        throw new Error("User not found");
+      }
+  
+      return user;
+    }),
+
+  createAICreds: publicProcedure
+  .input(
+    z.object({
+      userId: z.number(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const aicred = await prisma.aICred.upsert({
+      where: {
+        userId: input.userId, // Use a unique identifier to find the record
+      },
+      create: {            // If not, create a new one
+        userId: input.userId,
+        count: 1,
+      },
+      update: {            // If exists, increment the count
+        count: { increment: 1 },
+      },
+    });
+    return aicred;
+  }),
+  getAICred: publicProcedure
+    .input(
+      z.object({
+        userId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { userId } = input;
+
+      // Check if the userId is provided
+      if (!userId) {
+        throw new Error("UserId is required");
+      }
+
+      // Fetch AICred for the userId
+      const aicred = await prisma.aICred.findUnique({
+        where: {
+          userId: userId, // Use userId to find the record
+        },
+      });
+
+      // If AICred does not exist, return a message or handle the error
+      if (!aicred) {
+        throw new Error("AICred not found for the provided userId");
+      }
+
+      return aicred;
+    }),
 });
 
 export type AppRouter = typeof appRouter;
