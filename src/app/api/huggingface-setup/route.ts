@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
   
-export function parseGeneratedContent(content: string): { emailContent: string, linkedinDMContent: string } {
+function parseGeneratedContent(content: string): { emailContent: string, linkedinDMContent: string } {
 const [emailContent, linkedinDMContent] = content.split("**Option 2: LinkedIn DM**");
 
 return {
