@@ -103,10 +103,15 @@ export default function ViewJobApplication() {
           </div>
           <span className="text-sm text-gray-400">View your jobs application</span>
         </div>
-        <button className="btn btn-neutral indicator bg-btncolor border-btncolor hover:bg-neutal-900 text-gray-200" onClick={() => router.push("/createJobApplication")}>
-          <span className="indicator-item badge badge-primary"></span>
-          <span className="px-6">Add Jobs</span>
-        </button>
+        <div className="flex gap-4">
+          <button className="btn btn-neutral indicator bg-btncolor border-btncolor hover:bg-neutal-900 text-gray-200" onClick={() => router.push("/createJobApplication")}>
+            <span className="indicator-item badge badge-primary"></span>
+            <span className="px-6">Add Jobs</span>
+          </button>
+          <button className="btn btn-neutral indicator bg-btncolor border-btncolor hover:bg-neutal-900 text-gray-200" onClick={() => router.push("/aiTools")}>
+            <span className="px-6">AI Tools</span>
+          </button>
+        </div>
       </div>
       
       <ViewJobApplicationFilter jobArray={jobArray} onFilter={handleFilter} />

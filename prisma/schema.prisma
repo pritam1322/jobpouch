@@ -14,14 +14,14 @@ datasource db {
 }
 
 model User {
-  id                   Int              @id @default(autoincrement())
-  email                String           @unique
+  id                   Int                   @id @default(autoincrement())
+  email                String                @unique
   password             String?
   name                 String?
   image                String?
-  emailVerified        DateTime?        @map(name: "email_verified")
-  userType             String? 
-  stripeCustomerId     String?          @unique
+  emailVerified        DateTime?             @map(name: "email_verified")
+  userType             String?
+  stripeCustomerId     String?               @unique
   stripeSubscriptionId String?
   subscriptionStatus   String?
   subscriptionPlan     String?
@@ -29,6 +29,8 @@ model User {
   Account              Account[]
   Subscription         SubscriptionDetails[]
   Skills               Skill[]
+  EmailTemplates       EmailTemplate[]
+  AICred               AICred[]
   @@map("candidates") // Maps this model to the 'candidates' table in the database
 }
 
@@ -86,9 +88,29 @@ model SubscriptionDetails {
 }
 
 model Skill {
-  id              Int    @id @default(autoincrement())
-  userId          Int
-  skills          String
+  id     Int    @id @default(autoincrement())
+  userId Int
+  skills String
 
   User User @relation(fields: [userId], references: [id]) // Relation to User model
+}
+
+model EmailTemplate {
+  id               String   @id @default(cuid())
+  name             String
+  emailtemplate    String
+  linkedintemplate String
+  userId           Int      @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  User             User     @relation(fields: [userId], references: [id])
+}
+
+model AICred {
+  id               String    @id @default(cuid())
+  userId           Int       @unique
+  count            Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  User             User     @relation(fields: [userId], references: [id])
 }
