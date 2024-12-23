@@ -32,6 +32,7 @@ export default function JobSummarization(){
     const handleJobSummarization = async (ev: React.FormEvent) => {
         ev.preventDefault();
         setSummary({}); // Clear previous summary
+        setJobdescInput('');
         if(getaiCreds?.count == 2 && user?.subscriptionPlan === ''){
             toast.error('You have no AI creds left. Update to subscription plan');
             return;

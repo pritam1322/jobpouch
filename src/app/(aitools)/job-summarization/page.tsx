@@ -12,7 +12,7 @@ export default function JobSummarizationPage(){
       }
     
     return (
-        <section className="flex flex-col items-center w-full my-16 text-white">
+        <section className="flex flex-col items-center w-full max-w-3xl mx-auto my-16 text-white">
             <JobSummarization />
         </section>
     )

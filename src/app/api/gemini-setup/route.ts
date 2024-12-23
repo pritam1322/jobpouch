@@ -1,4 +1,6 @@
+import authOptions from "@/lib/authOptions";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
@@ -10,8 +12,7 @@ export async function POST(request : Request){
     const body = await request.json();
     let { prompt } = body;
 
-    const session = await getSession();
-
+    const session = await getServerSession(authOptions);
     // Check if the user is authenticated
     if (!session?.user) {
         return NextResponse.json({ error: "Unauthorized access, user not logged in." }, { status: 401 });
@@ -58,7 +59,10 @@ const parseContent = (content: string) => {
     return {
         keyRequirements: extractSection("1- Key Requirements"),
         responsibilities: extractSection("2- Responsibilities"),
-        jobOverview: content.match(/(?<=\*\*3- Job Overview:\*\*\n)(.*?)(?=\n\*\*|$)/s)?.[0]?.trim() || "",
+        jobOverview: (() => {
+            const regex = /\*\*3- Job Overview:\*\*\n(.*?)(?=\n\*\*|$)/s;
+            return content.match(regex)?.[1]?.trim() || "";
+        })(),
         keywords: extractSection("4- Keywords", true),
     };
 };
