@@ -1,7 +1,6 @@
 import authOptions from "@/lib/authOptions";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 
