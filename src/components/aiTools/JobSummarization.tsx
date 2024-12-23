@@ -73,7 +73,7 @@ export default function JobSummarization(){
                 setSummary({ error: data.message || "Something went wrong." });
             }
         } catch (error) {
-            toast.error("Failed to fetch job summary summary");
+            toast.error("Failed to fetch job summary summary"+ error);
             setSummary({ error: "Failed to summarize the job description." });
         }
     };

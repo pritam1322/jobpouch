@@ -1,14 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
-interface GeneratedResponse {
-    message: string;
-    response: string;
-  }
   
 export function parseGeneratedContent(content: string): { emailContent: string, linkedinDMContent: string } {
 const [emailContent, linkedinDMContent] = content.split("**Option 2: LinkedIn DM**");

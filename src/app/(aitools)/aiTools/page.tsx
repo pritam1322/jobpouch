@@ -1,7 +1,5 @@
 'use client';
 
-import { AppSidebar } from "./SideBarSection";
-import { SidebarProvider } from "@/components/ui/sidebar"
 import { useTheme } from "next-themes"
 
 export default function AIToolsPage(){

@@ -101,7 +101,7 @@ export default function LLMEmailDM() {
         setError(data.error || "Something went wrong.");
       }
     } catch (error) {
-      toast.error("Error occurred while generating message.");
+      toast.error("Error occurred while generating message." , error);
       setError("Failed to generate message.");
     }
   };
