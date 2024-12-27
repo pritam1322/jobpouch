@@ -7,8 +7,19 @@
   import toast from "react-hot-toast";
   import { trpc } from "@/trpc-client/client";
   import Script from "next/script";
-import { prisma } from "@/trpc-server/prisma";
+  import { prisma } from "@/trpc-server/prisma";
 
+  interface RazorpayResponse {
+    razorpay_payment_id: string,
+    razorpay_order_id: string,
+    razorpay_signature: string
+  }
+
+  declare global{
+    interface Window {
+      Razorpay: any;
+    }
+  }
 
   export default function PricingPage() {
     const router = useRouter();
@@ -55,18 +66,18 @@ import { prisma } from "@/trpc-server/prisma";
       
       if (subscriptionId) {
         // stripe?.redirectToCheckout({ sessionId });
-        let amount = plan === 'essential' ? 5000 : 15000; // Amount in paise (₹50 or ₹150)
+        const amount = plan === 'essential' ? 171 : 428; // Amount in paise (₹50 or ₹150)
     
         const options = {
           key: process.env.NEXT_PUBLIC_RAZORPAY_CLIENT_ID, // Razorpay key
           subscription_id: subscriptionId,
           customer_id: customerId,
           amount: amount.toString(),
-          currency: "USD",
+          currency: "INR",
           name: "JobPouch",
           description: `${plan} Plan Subscription`,
           image: "https://example.com/logo.png",
-          handler: function (response: any) {
+          handler: function (response: RazorpayResponse) {
             console.log("Payment Success:", response);
             prisma.subscriptionDetails.update({
               where: { razorpaySubscriptionId: subscriptionId},
@@ -91,7 +102,7 @@ import { prisma } from "@/trpc-server/prisma";
           },
           //callback_url : `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
       }
-      const razorpay = new (window as any).Razorpay(options); // Initialize Razorpay
+      const razorpay = new (window as Window).Razorpay(options); // Initialize Razorpay
       razorpay.open(); 
     };
   }

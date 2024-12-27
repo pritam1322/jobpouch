@@ -3,6 +3,15 @@ import { prisma } from '@/trpc-server/prisma';
 import { headers } from 'next/headers';
 import crypto from 'crypto';
 
+interface RazorpaySubscription {
+  id: string;
+  customer_id: string;
+  plan_id: string;
+  status: string;
+  start_at: number;
+  end_at: number;
+}
+
 export async function POST(request: Request) {
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
   const rawBody = await request.text();
@@ -45,7 +54,7 @@ function verifyRazorpaySignature(payload: string, signature: string, secret: str
   return hash === signature;
 }
 
-async function handleSubscriptionCreateOrUpdate(subscription: any) {
+async function handleSubscriptionCreateOrUpdate(subscription: RazorpaySubscription) {
   const razorpayCustomerId = subscription.customer_id;
   const user = await prisma.user.findUnique({
     where: { razorpayCustomerId },
