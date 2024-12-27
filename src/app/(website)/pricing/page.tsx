@@ -45,7 +45,7 @@
 
   export default function PricingPage() {
     const router = useRouter();
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     if(!session?.user?.email){
       router.push('/login')
     }
@@ -56,9 +56,8 @@
     );
     
 
-    if(!session?.user?.id || !user?.id ){
-      toast.success('Already subscribed');
-      router.push('/')
+    if (status === "unauthenticated") {
+      router.push("/");
     }
 
     const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
@@ -165,8 +164,8 @@
             <div className="flex flex-col">
               <span>Essential plan</span>
               <span className="text-3xl">
-                <FontAwesomeIcon icon={faSackDollar} className="h-6" /> 5{' '}
-                <span className="text-sm text-gray-400">/ month</span>
+                <FontAwesomeIcon icon={faSackDollar} className="h-6" /> 2{' '}
+                <span className="text-sm text-gray-400">dollar / month</span>
               </span>
               <ul className="menu bg-base-200 rounded-btn w-70 mt-4">
                 <li className="flex flex-row items-center">
@@ -191,8 +190,8 @@
             <div className="flex flex-col">
               <span>Premium plan</span>
               <span className="text-3xl">
-                <FontAwesomeIcon icon={faSackDollar} className="h-6" /> 15{' '}
-                <span className="text-sm text-gray-400">/ month</span>
+                <FontAwesomeIcon icon={faSackDollar} className="h-6" /> 5{' '}
+                <span className="text-sm text-gray-400">dollars / month</span>
               </span>
               <ul className="menu bg-base-200 rounded-btn w-70 mt-4">
                 <li className="flex flex-row items-center">
