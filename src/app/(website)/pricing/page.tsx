@@ -15,9 +15,31 @@
     razorpay_signature: string
   }
 
-  declare global{
+  interface RazorpayOptions {
+    key: string | undefined;
+    subscription_id: string;
+    customer_id: string;
+    amount: string;
+    currency: string;
+    name: string;
+    description: string;
+    image: string;
+    handler: (response: RazorpayResponse) => void;
+    prefill: {
+      name: string;
+      email: string;
+    };
+    notes: {
+      address: string;
+    };
+    theme: {
+      color: string;
+    };
+  }
+
+  declare global {
     interface Window {
-      Razorpay: any;
+      Razorpay: new (options: RazorpayOptions) => { open: () => void; [key: string]: any };
     }
   }
 
@@ -102,7 +124,7 @@
           },
           //callback_url : `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
       }
-      const razorpay = new (window as Window).Razorpay(options); // Initialize Razorpay
+      const razorpay = new window.Razorpay(options); // Initialize Razorpay
       razorpay.open(); 
     };
   }
