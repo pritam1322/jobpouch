@@ -39,7 +39,7 @@
 
   declare global {
     interface Window {
-      Razorpay: new (options: RazorpayOptions) => { open: () => void; [key: string]: any };
+      Razorpay: new (options: RazorpayOptions) => { open: () => void; };
     }
   }
 
