@@ -66,7 +66,7 @@
       
       console.log('Stripe Publishable Key:', process.env.NEXT_PUBLIC_RAZORPAY_CLIENT_ID);
       // const stripe = await stripePromise;
-      
+      toast.success('Subscription process Initiated')
       console.log('POST 123');
       let planId: string | null | undefined;
       if (plan == 'essential') {

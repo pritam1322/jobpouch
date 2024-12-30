@@ -23,6 +23,7 @@ export default function CreateJobApplication() {
 
   const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
 
+
   // Fetch job applications
   const { data: jobs } = trpc.getApplication.useQuery(
     { where: { candidateId: candidateId ?? 0 } },
@@ -38,15 +39,21 @@ export default function CreateJobApplication() {
       alert('You must be logged in to create a job application.');
       return;
     }
-    if(user?.subscriptionPlan === '' && jobs?.length === 5){
+    if ((
+        user?.subscriptionPlan == null ||
+        user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus !== 'completed' ||
+        user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus !== 'completed'
+      ) && (jobs?.length ?? 0) >= 5) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
-    if(user?.subscriptionPlan === 'Essential' && jobs?.length === 15){
+    
+    if (user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus === 'completed' && (jobs?.length ?? 0) >= 15) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
-    if(user?.subscriptionPlan === 'Premium' && jobs?.length === 30){
+    
+    if (user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus === 'completed' && (jobs?.length ?? 0) >= 30) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }

@@ -61,6 +61,7 @@ const DataAnalysis = () => {
     datasets: [{
       label: 'Application Status',
       data: Object.values(statusCounts),
+      barThickness: 70,
       backgroundColor: ['rgba(75,192,192,0.6)', 'rgba(255,99,132,0.6)', 'rgba(255,206,86,0.6)']
     }]
   };
@@ -91,7 +92,7 @@ const DataAnalysis = () => {
       <div className='max-w-xl mx-auto ml-8 mt-8'>
         <h1 className='font-semibold'>Companies Data Analysis</h1>
         {companyChartData.labels.length > 0 ? (
-          <Pie data={companyChartData} height={50} />
+          <Pie data={companyChartData} height={50}  />
         ) : (
           <p>No jobs found.</p>
         )}

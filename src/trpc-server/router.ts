@@ -210,6 +210,20 @@ export const appRouter = router({
 
       return aicred;
     }),
+    updateUserNameEmail: publicProcedure.input(
+      z.object({
+        userId: z.number(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return prisma.user.update({
+        where: { id: input.userId},
+        data: { 
+          name : input.name
+         },
+      })
+    }),
 });
 
 export type AppRouter = typeof appRouter;

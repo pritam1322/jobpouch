@@ -23,7 +23,7 @@ export default function StatsJobCount(){
         );
     }
 
-    const activeJobs = jobs.filter((job) => job.status !== "Accepted" && job.status !== "Rejected");
+    const activeJobs = jobs.filter((job) => job.status !== "Accepted" );
     const probabilty  = ((jobs.length - activeJobs.length) *  100 )/jobs.length;
     if (isLoading) {
     return (

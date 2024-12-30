@@ -46,15 +46,16 @@ export default function LLMEmailDM() {
     ev.preventDefault();
     setEmailContent(""); // Clear previous email content
     setLinkedinDMContent(""); 
-    if(getaiCreds?.count == 2 && user?.subscriptionPlan === ''){
+    if(getaiCreds?.count == 2 && ((user?.subscriptionPlan === null) || (user?.subscriptionPlan === undefined) || (user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus !== 'completed') 
+    || (user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus !== 'completed'))){
       toast.error('You have no AI creds left. Update to subscription plan');
       return;
     }
-    if(getaiCreds?.count == 5 && user?.subscriptionPlan === 'Essential'){
+    if(getaiCreds?.count == 5 && user?.subscriptionPlan === 'Essential'  && user?.subscriptionStatus === 'completed'){
       toast.error('You have no AI creds left. Update to Premium subscription plan');
       return;
     }
-    if(getaiCreds?.count == 10 && user?.subscriptionPlan === 'Premium'){
+    if(getaiCreds?.count == 10 && user?.subscriptionPlan === 'Premium'  && user?.subscriptionStatus === 'completed'){
       toast.error('You have no AI creds left.');
       return;
     }

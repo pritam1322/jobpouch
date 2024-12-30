@@ -1,4 +1,4 @@
-import { BotMessageSquare, Calendar, ChevronsLeftRight, Home, Inbox } from "lucide-react"
+import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, Home, Inbox, UserPen } from "lucide-react"
 
 import {
   Sidebar,
@@ -6,13 +6,12 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader
 } from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-
+import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu"
 
 // Menu items.
 const items = [
@@ -23,29 +22,34 @@ const items = [
   },
   {
     title: "Applied Jobs",
-    url: "/viewJobApplication",
+    url: "viewJobApplication",
     icon: Inbox,
   },
   {
-    title: "Job Summarization",
-    url: "/job-summarization",
-    icon: BotMessageSquare,
+    title: "AI Tools",
+    url: "/aiTools",
+    icon: Calendar,
   },
   {
-    title: "Email Generation",
-    url: "/email-generation",
-    icon: Calendar,
+    title: "Profile",
+    url: "/profile",
+    icon: UserPen,
+  },
+  {
+    title: "Statistics",
+    url: "/stats",
+    icon: ChartNoAxesCombined,
   },
 ]
 
-export function AppSidebar() {
+export function CandidateSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader>
+        <SidebarHeader>
             <SidebarMenu>
             <SidebarMenuItem>
                 <DropdownMenu>
-                <DropdownMenuTrigger asChild className="min-h-10">
+                <DropdownMenuTrigger asChild className="min-h-10 text-md">
                     <SidebarMenuButton>
                     JobPouch
                     <ChevronsLeftRight className="ml-auto" />
@@ -57,7 +61,7 @@ export function AppSidebar() {
         </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>AI Application</SidebarGroupLabel>
+        <SidebarGroupLabel>Job Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
