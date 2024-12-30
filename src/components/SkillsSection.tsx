@@ -2,6 +2,9 @@
 
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "./ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function SkillsSection() {
   const { data: session, status } = useSession();
@@ -78,44 +81,38 @@ export default function SkillsSection() {
   const visibleSkills = showAll ? submittedSkills : submittedSkills.slice(0, 4);
 
   return (
-    <section className="bg-gray-950 text-white py-10 px-4 mt-8">
-      <div className="flex flex-col max-w-5xl my-8 mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-6">Add Your Skills</h1>
-        <form onSubmit={handleAddSkills} className="form-control w-full max-w-lg mx-auto">
+    <section className=" text-gray-400 py-10  mt-2 justify-center mx-auto">
+      <div className="flex flex-col my-8">
+        <h1 className="text-3xl font-bold mb-6 text-white">Add Your Skills</h1>
+        <form onSubmit={handleAddSkills} className="w-1/2">
           <label htmlFor="primarySkill" className="label">
             <span className="label-text text-lg">Enter your primary skill:</span>
           </label>
-          <input
+          <Input
             id="primarySkill"
             type="text"
             placeholder="e.g., Data Science, Node.js Developer"
             value={primarySkill}
             onChange={(ev) => setPrimarySkill(ev.target.value)}
-            className="input input-bordered w-full bg-gray-800 border-gray-700 text-gray-100 px-4 py-2 rounded-md mb-4"
+            className="input input-bordered border border-gray-50"
           />
           <label htmlFor="skillsInput" className="label">
             <span className="label-text text-lg">Enter your skills (comma-separated):</span>
           </label>
-          <input
+          <Textarea 
             id="skillsInput"
-            type="text"
             placeholder="JavaScript, Python, React"
-            value={skillsInput}
+            value={submittedSkills}
             onChange={(ev) => setSkillsInput(ev.target.value)}
-            className="input input-bordered w-full bg-gray-800 border-gray-700 text-gray-100 px-4 py-2 rounded-md"
+            className="min-h-[120px] border border-gray-50"
           />
-          <button
-            type="submit"
-            className="btn btn-primary px-6 py-2 my-6 bg-indigo-600 hover:bg-indigo-500 rounded-md"
-          >
-            Add
-          </button>
+          <Button type="submit" variant="destructive" className="w-2/5 my-6">Add</Button>
         </form>
       </div>
-      <div className="mt-10 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-4">Primary Skill:</h2>
+      {/* <div className="mt-10 max-w-3xl mx-auto">
+        <h2 className="text-lg font-semibold mb-4">Primary Skill:  {primarySkill || "Not set yet."}</h2>
         <p className="text-lg bg-gray-800 text-white w-1/3 px-4 py-3 rounded-md mb-6">{primarySkill || "Not set yet."}</p>
-        <h2 className="text-2xl font-semibold mb-4">Your Skills:</h2>
+        <h2 className="text-lg font-semibold mb-4">Your Skills:</h2>
         {submittedSkills.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -147,7 +144,7 @@ export default function SkillsSection() {
         ) : (
           <p className="text-gray-400">No skills submitted yet. Start adding!</p>
         )}
-      </div>
+      </div> */}
     </section>
   );
 }

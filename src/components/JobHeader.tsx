@@ -48,7 +48,7 @@ export default function JobHeader(){
                     </div>
 
                     <div className="items-center gap-8 hidden sm:flex hover:bg-neutral-600 p-2 rounded-md">
-                        <Link href={'/skills'} className="font-semibold">Skills</Link>
+                        <Link href={'/profile'} className="font-semibold">Profile</Link>
                     </div>
                 </div>
 

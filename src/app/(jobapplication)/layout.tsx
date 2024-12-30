@@ -4,8 +4,10 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Provider } from "@/lib/reactQuery-provider";
-import JobHeader from "@/components/JobHeader";
 import { Analytics } from '@vercel/analytics/next';
+import { CandidateSidebar } from "@/components/sidebars/CandidateSideBar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,8 +25,20 @@ export default function JobLayout({
         <SessionWrapper >
           <Provider>
             <Toaster />
-            <JobHeader />
-            {children}
+            <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider>
+            <CandidateSidebar />
+              <SidebarTrigger />
+              <div className="flex w-full mx-auto">
+                {children}
+              </div>
+            </SidebarProvider>
+            </ThemeProvider>
             <Analytics />
           </Provider>
         </SessionWrapper>

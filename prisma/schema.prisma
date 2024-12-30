@@ -92,10 +92,10 @@ model SubscriptionDetails {
 
 
 model Skill {
-  id     Int    @id @default(autoincrement())
-  userId Int
-  skills String
-
+  id                            Int    @id @default(autoincrement())
+  userId                        Int
+  skills                        String
+  primarySkill                  String?
   User User @relation(fields: [userId], references: [id]) // Relation to User model
 }
 
@@ -118,4 +118,6 @@ model AICred {
   updatedAt        DateTime  @updatedAt
   User             User     @relation(fields: [userId], references: [id])
 }
+
+
  

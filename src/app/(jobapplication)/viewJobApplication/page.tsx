@@ -84,7 +84,7 @@ export default function ViewJobApplication() {
   }
 
   return (
-    <section className="mt-4 mb-20 lg:mx-16 sm:mx-4">
+    <section className="mt-4 mb-20 lg:mx-auto sm:mx-4">
       <button className="btn btn-warning">
         Active Jobs
         <div className="badge p-3"><FontAwesomeIcon icon={faCircleUp} className="h-4 pr-1" />{activeJobs.length}</div>
@@ -105,11 +105,7 @@ export default function ViewJobApplication() {
         </div>
         <div className="flex gap-4">
           <button className="btn btn-neutral indicator bg-btncolor border-btncolor hover:bg-neutal-900 text-gray-200" onClick={() => router.push("/createJobApplication")}>
-            <span className="indicator-item badge badge-primary"></span>
             <span className="px-6">Add Jobs</span>
-          </button>
-          <button className="btn btn-neutral indicator bg-btncolor border-btncolor hover:bg-neutal-900 text-gray-200" onClick={() => router.push("/aiTools")}>
-            <span className="px-6">AI Tools</span>
           </button>
         </div>
       </div>
