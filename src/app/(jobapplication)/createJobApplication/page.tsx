@@ -39,17 +39,21 @@ export default function CreateJobApplication() {
       alert('You must be logged in to create a job application.');
       return;
     }
-    if(((user?.subscriptionPlan == null) || (user?.subscriptionPlan === undefined) || (user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus !== 'completed') 
-      || (user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus !== 'completed')) && jobs?.length! >= 5){
+    if ((
+        user?.subscriptionPlan == null ||
+        user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus !== 'completed' ||
+        user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus !== 'completed'
+      ) && (jobs?.length ?? 0) >= 5) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
     
-    if(user?.subscriptionPlan == 'Essential' && user?.subscriptionStatus === 'completed' && jobs?.length! >= 15){
+    if (user?.subscriptionPlan === 'Essential' && user?.subscriptionStatus === 'completed' && (jobs?.length ?? 0) >= 15) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }
-    if(user?.subscriptionPlan == 'Premium' && user?.subscriptionStatus === 'completed' && jobs?.length! >= 30){
+    
+    if (user?.subscriptionPlan === 'Premium' && user?.subscriptionStatus === 'completed' && (jobs?.length ?? 0) >= 30) {
       toast.error('You have reached the maximum number of applications for your subscription plan.');
       return;
     }

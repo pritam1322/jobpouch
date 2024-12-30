@@ -1,4 +1,4 @@
-import { BotMessageSquare, Calendar, ChevronsLeftRight, Home, Inbox, Settings, UserPen } from "lucide-react"
+import { BotMessageSquare, Calendar, ChevronsLeftRight, Home, Inbox } from "lucide-react"
 
 import {
   Sidebar,

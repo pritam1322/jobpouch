@@ -11,7 +11,6 @@ export default function SkillsSection() {
   const [skillsInput, setSkillsInput] = useState("");
   const [primarySkill, setPrimarySkill] = useState("");
   const [submittedSkills, setSubmittedSkills] = useState<string[]>([]);
-  const [showAll, setShowAll] = useState(false);
 
   const userId = session?.user?.id;
 
@@ -67,18 +66,6 @@ export default function SkillsSection() {
     }
   }
 
-  async function handleRemoveSkill(skill: string) {
-    const response = await fetch("/api/skills", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, skillName: skill }),
-    });
-    if (response.ok) {
-      setSubmittedSkills((prev) => prev.filter((s) => s !== skill));
-    }
-  }
-
-  const visibleSkills = showAll ? submittedSkills : submittedSkills.slice(0, 4);
 
   return (
     <section className=" text-gray-400 py-10  mt-2 justify-center mx-auto">
@@ -109,42 +96,6 @@ export default function SkillsSection() {
           <Button type="submit" variant="destructive" className="w-2/5 my-6">Add</Button>
         </form>
       </div>
-      {/* <div className="mt-10 max-w-3xl mx-auto">
-        <h2 className="text-lg font-semibold mb-4">Primary Skill:  {primarySkill || "Not set yet."}</h2>
-        <p className="text-lg bg-gray-800 text-white w-1/3 px-4 py-3 rounded-md mb-6">{primarySkill || "Not set yet."}</p>
-        <h2 className="text-lg font-semibold mb-4">Your Skills:</h2>
-        {submittedSkills.length > 0 ? (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {visibleSkills.map((skill, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center bg-gray-800 text-white px-4 py-3 rounded-md shadow-md"
-                >
-                  <span>{skill}</span>
-                  <button
-                    onClick={() => handleRemoveSkill(skill)}
-                    className="text-gray-400 hover:text-white"
-                    aria-label={`Remove ${skill}`}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-            {submittedSkills.length > 4 && (
-              <button
-                onClick={() => setShowAll(!showAll)}
-                className="mt-4 text-indigo-500 hover:underline"
-              >
-                {showAll ? "Show Less" : "Show All"}
-              </button>
-            )}
-          </>
-        ) : (
-          <p className="text-gray-400">No skills submitted yet. Start adding!</p>
-        )}
-      </div> */}
     </section>
   );
 }
