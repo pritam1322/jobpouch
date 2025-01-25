@@ -35,15 +35,18 @@ model User {
 }
 
 model JobApplication {
-  id             Int      @id @default(autoincrement())
-  candidateId    Int // Foreign key for the User
-  jobTitle       String
-  companyName    String
-  status         String // e.g., Applied, Interviewing, Offer, etc.
-  appliedDate    DateTime @default(now())
-  referralPerson String?
-  jobLink        String
-  techguid       String?
+  id                                    Int      @id @default(autoincrement())
+  candidateId                           Int // Foreign key for the User
+  jobTitle                              String
+  companyName                           String
+  status                                String // e.g., Applied, Interviewing, Offer, etc.
+  appliedDate                           DateTime @default(now())
+  referralPerson                        String?
+  referralPersonName                    String? //
+  jobLink                               String
+  techguid                              String?
+  salaryRange                           String?
+  followupDate                          DateTime @default(now())
 
   User User @relation(fields: [candidateId], references: [id]) // Relation to User model
 }
@@ -117,6 +120,19 @@ model AICred {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   User             User     @relation(fields: [userId], references: [id])
+}
+
+model Projects{
+  id                            String    @id @default(cuid())
+  userId                        Int       
+  title                         String
+  description                   String
+  techstack                     String
+  githubLink                    String?
+  liveLink                      String?
+  thumbnail                     String    @default("/default-thumbnail.jpg")
+  createdAt                     DateTime  @default(now())
+  updatedAt                     DateTime  @updatedAt 
 }
 
 

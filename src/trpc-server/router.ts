@@ -59,7 +59,10 @@ export const appRouter = router({
         appliedDate: z.string().datetime(),
         referralPerson: z.string().optional(),
         jobLink: z.string(),
-        techguid: z.string()
+        techguid: z.string(),
+        referralPersonName: z.string().optional(),
+        salaryRange: z.string().optional(),
+        followupDate:  z.string().datetime()
       })
     )
     .mutation(async ({ input}) => {
@@ -75,7 +78,10 @@ export const appRouter = router({
           appliedDate: input.appliedDate,
           referralPerson: input.referralPerson || null,
           jobLink: input.jobLink,
-          techguid: input.techguid
+          techguid: input.techguid,
+          referralPersonName: input.referralPersonName || undefined,
+          salaryRange: input.salaryRange || null,
+          followupDate: input.followupDate
         },
       });
 
@@ -224,6 +230,64 @@ export const appRouter = router({
          },
       })
     }),
+
+    // Add project
+    addNewProject: publicProcedure.input(
+      z.object({
+        userId: z.number(),
+        title: z.string(),
+        description: z.string(),
+        techstack: z.string(),
+        githubLink: z.string().optional(),
+        liveLink: z.string().optional(),
+        thumbnail: z.string()
+      })
+    )
+    .mutation(async ({ input }) => {
+      return prisma.projects.create({
+        data: {
+          userId: input.userId,
+          title: input.title,
+          description: input.description,
+          techstack: input.techstack,
+          githubLink: input.githubLink || null,
+          liveLink: input.liveLink || null,
+          thumbnail: input.thumbnail
+        },
+      });
+    }),
+
+    getProjects: publicProcedure.input(
+      z.object({
+        userId: z.number() 
+      })
+    )
+    .query(async ({ input }) => {
+      const { userId } = input;
+      return await prisma.projects.findMany({ where: { userId } })
+    }),
+    getProjectById: publicProcedure.input(
+      z.object({
+        projectId: z.string()
+      })
+    )
+    .query(async({input}) => {
+      const { projectId } = input;
+      return await prisma.projects.findUnique({ where: { id: projectId } })
+    }),
+
+    deleteApplication: publicProcedure.input(
+      z.object({
+        applicationId: z.number()
+      })
+    )
+    .mutation(async ({ input }) => {
+        return prisma.jobApplication.delete({
+          where: {
+            id: input.applicationId,
+          },
+        })
+    })
 });
 
 export type AppRouter = typeof appRouter;

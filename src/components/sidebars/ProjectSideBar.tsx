@@ -26,28 +26,18 @@ const items = [
     icon: Inbox,
   },
   {
-    title: "AI Tools",
-    url: "/aiTools",
+    title: "Project Section",
+    url: "/projects",
     icon: Calendar,
   },
   {
     title: "Profile",
     url: "/profile",
     icon: UserPen,
-  },
-  {
-    title: "Project Page",
-    url: "/projects",
-    icon: Calendar,
-  },
-  {
-    title: "Statistics",
-    url: "/stats",
-    icon: ChartNoAxesCombined,
-  },
+  }
 ]
 
-export function CandidateSidebar() {
+export function ProjectSidebar() {
   return (
     <Sidebar>
         <SidebarHeader>

@@ -5,9 +5,9 @@ import { Toaster } from "react-hot-toast";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Provider } from "@/lib/reactQuery-provider";
 import { Analytics } from '@vercel/analytics/next';
-import { CandidateSidebar } from "@/components/sidebars/CandidateSideBar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ProjectSidebar } from "@/components/sidebars/ProjectSideBar";
 
 export const metadata: Metadata = {
   title: "JobPouch App",
@@ -32,7 +32,7 @@ export default function JobLayout({
             disableTransitionOnChange
           >
             <SidebarProvider>
-            <CandidateSidebar />
+            <ProjectSidebar />
               <SidebarTrigger />
               <div className="flex w-full mx-auto">
                 {children}

@@ -39,9 +39,10 @@ const StatusPopup: React.FC<StatusPopupProps> = ({ newStatus, setNewStatus, onCl
                   onChange={(e) => setNewStatus(e.target.value)} 
                   className="select select-ghost text-neutral-800 bg-gray-200" required>
             <option value="Applied">Applied</option>
-            <option value="In Progress">In Progress</option>
             <option value="Accepted">Accepted</option>
             <option value="Rejected">Rejected</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
           </select>
         </div>
         <div className="flex justify-end p-4">
