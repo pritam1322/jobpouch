@@ -3,13 +3,14 @@
 import { AlignJustify } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import LogoutButton from "../LogoutButton";
 
 export default function ProjectHeader() {
 
     const [mobileSection, setMobileSection] = useState(false);
     const [shadow, setShadow] = useState(false);
+    const router = useRouter();
 
     const { data: session, status } = useSession();
     console.log(session);
@@ -23,6 +24,11 @@ export default function ProjectHeader() {
     useEffect(() => {
         document.body.style.overflow = mobileSection ? 'hidden' : 'auto';
     }, [mobileSection]);
+
+
+    if(status === 'unauthenticated'){
+        router.push('/');
+      }
 
     // Menu items.
     const menuItems = [
@@ -43,6 +49,8 @@ export default function ProjectHeader() {
         url: "#search"
         }
     ]
+
+    
 
     return (
         <header>

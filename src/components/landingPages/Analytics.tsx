@@ -12,7 +12,7 @@ export default function Analytics(){
                         Make Data-Driven Decisions in Your Job Search
                     </h2>
                     <p className="text-gray-300 text-lg mb-8">
-                        Transform your job search strategy with powerful analytics and insights that help you understand what works and what doesn't.
+                        Transform your job search strategy with powerful analytics and insights that help you understand what works and what doesn&apos;t.
                     </p>
                     
                     {/*Analytics Features*/}

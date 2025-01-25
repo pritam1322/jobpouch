@@ -1,6 +1,6 @@
 'use client'
 import { trpc } from "@/trpc-client/client";
-import { ChevronsRight, Eye, Star, View, Vote } from "lucide-react";
+import { Eye, Star, View, Vote } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

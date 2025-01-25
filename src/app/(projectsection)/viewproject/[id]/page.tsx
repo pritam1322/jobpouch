@@ -11,7 +11,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 export default function ProjectDetailPage({ params }: { params: { id: string } }) {
 
     const router = useRouter();
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     
 
     if(status === 'unauthenticated'){

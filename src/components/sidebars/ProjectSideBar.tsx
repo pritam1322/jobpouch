@@ -1,4 +1,4 @@
-import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, Home, Inbox, UserPen } from "lucide-react"
+import { Calendar, ChevronsLeftRight, Home, Inbox, UserPen } from "lucide-react"
 
 import {
   Sidebar,
