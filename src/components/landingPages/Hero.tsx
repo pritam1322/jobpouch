@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export default function Hero(){
 
-    const { data: session, status } = useSession();
+    const { status } = useSession();
     let redirectLink = '/signup' ;
 
     if (status !== 'unauthenticated') {
