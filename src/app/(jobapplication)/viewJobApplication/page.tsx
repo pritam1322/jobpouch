@@ -41,6 +41,7 @@ export default function ViewJobApplication() {
   const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null);
   const [newStatus, setNewStatus] = useState(""); 
   const [jobToDelete, setJobToDelete] = useState<JobApplication | null>(null);
+  const [deletePopUp, setDeletePopUp] = useState(false);
   
   if (status === "unauthenticated") {
     router.push("/");
@@ -67,20 +68,31 @@ export default function ViewJobApplication() {
 
   // Transform jobs into the required format
   useEffect(() => {
+    if (!jobArray.length) return;
+    
     const transformedJobs: JobApplication[] = jobArray.map((job) => ({
       id: job.id,
       status: job.status,
       candidateId: job.candidateId,
       jobTitle: job.jobTitle,
       companyName: job.companyName,
-      appliedDate: job.appliedDate, // Ensure Date object
-      referralPerson: job.referralPerson ?? null, // Default to null
-      jobLink: job.jobLink ?? null, // Default to null
+      appliedDate: job.appliedDate,
+      referralPerson: job.referralPerson ?? null,
+      jobLink: job.jobLink ?? null,
       onStatusUpdate: () => handleUpdateClick(job),
-      onDeleteJob: () => handleDeleteClick(job)
+      onDeleteJob: () => handleDeleteClick(job),
     }));
-    setFilteredJobs(transformedJobs);
+  
+    setFilteredJobs((prev) => 
+      JSON.stringify(prev) !== JSON.stringify(transformedJobs) ? transformedJobs : prev
+    );
   }, [jobs]);
+
+  useEffect(() => {
+    if (error) {
+      router.back();
+    }
+  }, [error, router]);
 
   const updateStatusMutation = trpc.updateApplicationStatus.useMutation({
     onSuccess: () => {
@@ -97,14 +109,27 @@ export default function ViewJobApplication() {
 
   const handleDeleteClick = (job: JobApplication) => {
     setJobToDelete(job);
+    setDeletePopUp(true);
   };
 
   const confirmDelete = async () => {
     if (jobToDelete) {
       await deleteJobMutation.mutateAsync({ applicationId: jobToDelete.id });
       setJobToDelete(null);
+      setDeletePopUp(false);
+      window.location.reload();
     }
   };
+
+  const cancelDelete = async (ev: React.MouseEvent<HTMLButtonElement>) => {
+    ev.stopPropagation();
+    setJobToDelete(null);
+    setDeletePopUp(false);
+
+    // Refresh the page using window.location.reload()
+    window.location.reload();
+    console.log('@@@@' + deletePopUp);
+  } 
 
   const handleStatusSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,10 +144,6 @@ export default function ViewJobApplication() {
         <p>Loading applications...</p>
       </section>
     );
-  }
-
-  if (error) {
-    router.back();
   }
 
   return (
@@ -188,8 +209,8 @@ export default function ViewJobApplication() {
 
 
       {/* Delete Alert box */}
-      {jobToDelete && (
-      <AlertDialog open={!!jobToDelete} onOpenChange={() => setJobToDelete(null)}>
+      {deletePopUp && (
+      <AlertDialog open={deletePopUp} onOpenChange={(open) => setDeletePopUp(open)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -198,7 +219,7 @@ export default function ViewJobApplication() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setJobToDelete(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={cancelDelete}>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
