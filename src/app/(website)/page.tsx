@@ -1,4 +1,3 @@
-import IntegratedCompanies from "@/components/IntegratedCompanies";
 import Analytics from "@/components/landingPages/Analytics";
 import Features from "@/components/landingPages/Features";
 import Footer from "@/components/landingPages/Footer";

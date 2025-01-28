@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       });
 
       if (!existingEmail) {
-        const savedEmail = await prisma.email.create({
+        await prisma.email.create({
           data: {
             gmailId: message.id!,
             subject: emailSubject,

@@ -1,5 +1,5 @@
 'use client';
-import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, ChevronsUpDown, Home, Inbox, MailPlus, UserPen } from "lucide-react"
+import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, ChevronsUpDown, Inbox, MailPlus } from "lucide-react"
 
 import {
   Sidebar,
