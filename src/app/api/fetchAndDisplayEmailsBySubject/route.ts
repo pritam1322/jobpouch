@@ -53,7 +53,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ messages: [], message: "No new emails found" });
     }
 
-    let newEmails: any[] = [];
     for (const message of messages) {
       const email = await gmail.users.messages.get({
         userId: "me",
@@ -79,11 +78,10 @@ export async function POST(req: Request) {
             userId: Number(session?.user.id),
           },
         });
-        newEmails.push(savedEmail);
       }
     }
 
-    return NextResponse.json({ messages: newEmails });
+    return NextResponse.json({ messages: "Emails synced in database" });
   } catch (error) {
     console.error("Error fetching emails:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/trpc-client/client";
-import { CircleCheck, Clock5, Mail, MailPlus, Search, Settings, Upload } from "lucide-react";
+import { CircleCheck, Clock5, Mail, MailPlus, Settings, Upload } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -26,7 +26,6 @@ import toast from "react-hot-toast";
 
 const ConnectGmailButton = () => {
   const { data: session } = useSession();
-  const [emails, setEmails] = useState<string[]>([]); // State to store emails
   const [ showSignInWithGoogle, setShowSignInWithGoogle ] = useState(false);
   const [ syncEmailSetting, setSyncEmailSetting ] = useState(false);
   const [ subject, setSubject ] = useState('');
@@ -40,7 +39,7 @@ const ConnectGmailButton = () => {
   const candidateId = user?.id ? user.id : null;
 
   // Fetch job applications
-  const { data: account, isLoading, error } = trpc.getAccountFromUserId.useQuery(
+  const { data: account } = trpc.getAccountFromUserId.useQuery(
     { userId: candidateId ?? 0 }, 
     { enabled: Boolean(candidateId) }
   );
@@ -58,7 +57,7 @@ const ConnectGmailButton = () => {
       signIn("google"); // Trigger the Google sign-in flow
     } else {
       // User is logged in, initiate Gmail connection flow
-      signIn("google", { callbackUrl: "/viewJobApplication" }); // Redirect to the callback URL after Google sign-in
+      signIn("google", { callbackUrl: "/emailJobApplication" }); // Redirect to the callback URL after Google sign-in
     }
   };
 

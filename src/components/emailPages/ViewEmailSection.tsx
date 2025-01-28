@@ -1,7 +1,5 @@
 'use client';
 import { trpc } from "@/trpc-client/client";
-import { prisma } from "@/trpc-server/prisma";
-import { Filter, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";

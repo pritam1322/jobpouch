@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     if(!jobDetails.jobTitle || !jobDetails.companyName || !jobDetails.status){
         return NextResponse.json({ error: "Incomplete job application details." }, { status: 400 });
     }
-    const savedJobApplication = await prisma.jobApplication.create({
+    await prisma.jobApplication.create({
       data: {
         candidateId: Number(session.user.id), // Assuming session has the user's ID
         jobTitle: jobDetails.jobTitle,

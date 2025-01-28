@@ -180,9 +180,9 @@ const timelineChartData = {
 
         {/* Application Status Distribution */}
         <div className="p-6 rounded border border-gray-200">
-          <h3 className="font-semibold mb-4">Application Status Distribution</h3>
+          <h3 className="font-semibold mb-4">Application Company Distribution</h3>
           <div className="h-64">
-            <Pie data={statusChartData} />
+            <Pie data={companyChartData} />
           </div>
         </div>
 

@@ -336,36 +336,50 @@ export const appRouter = router({
           },
         })
     }),
-    updateJobApplication: publicProcedure.input(
-      z.object({
-        id: z.number(),
-        jobTitle: z.string().optional(),
-        companyName: z.string().optional(),
-        status: z.string().optional(),
-        appliedDate: z.string().datetime().optional(),
-        referralPerson: z.string().optional(),
-        jobLink: z.string().optional(),
-        referralPersonName: z.string().optional(),
-        salaryRange: z.string().optional(),
-        followupDate: z.string().datetime().optional(),
-      })
-    ).mutation(async ({ input }) => {
-      // Filter out undefined or empty fields from the input data
-      const updateData: Record<string, any> = {};
-    
-      // Loop through the input fields and only include those that are not undefined
-      for (const key in input) {
-        if (input[key as keyof typeof input] !== undefined) {
-          updateData[key as keyof typeof input] = input[key as keyof typeof input];
-        }
+
+  updateJobApplication: publicProcedure.input(
+    z.object({
+      id: z.number(),
+      jobTitle: z.string().optional(),
+      companyName: z.string().optional(),
+      status: z.string().optional(),
+      appliedDate: z.string().datetime().optional(),
+      referralPerson: z.string().optional(),
+      jobLink: z.string().optional(),
+      referralPersonName: z.string().optional(),
+      salaryRange: z.string().optional(),
+      followupDate: z.string().datetime().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    // Define a type for the update data
+    type UpdateData = Partial<{
+      jobTitle: string;
+      companyName: string;
+      status: string;
+      appliedDate: string;
+      referralPerson: string;
+      jobLink: string;
+      referralPersonName: string;
+      salaryRange: string;
+      followupDate: string;
+    }>;
+
+    // Filter out undefined or empty fields from the input data
+    const updateData: UpdateData = {};
+
+    // Loop through the input fields and only include those that are not undefined
+    for (const key in input) {
+      if (key !== 'id' && input[key as keyof typeof input] !== undefined) {
+        updateData[key as keyof UpdateData] = input[key as keyof typeof input] as string | undefined;
       }
-    
-      // Perform the update with the dynamic data
-      return prisma.jobApplication.update({
-        where: { id: input.id },
-        data: updateData,
-      });
-    }),    
+    }
+
+    // Perform the update with the dynamic data
+    return prisma.jobApplication.update({
+      where: { id: input.id },
+      data: updateData,
+    });
+  }),
 });
 
 export type AppRouter = typeof appRouter;

@@ -39,7 +39,6 @@ export default function ViewJobApplication() {
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobApplication | null>(null);
-  const [newStatus, setNewStatus] = useState(""); 
   const [jobToDelete, setJobToDelete] = useState<JobApplication | null>(null);
   const [deletePopUp, setDeletePopUp] = useState(false);
   
@@ -94,16 +93,9 @@ export default function ViewJobApplication() {
     }
   }, [error, router]);
 
-  const updateStatusMutation = trpc.updateApplicationStatus.useMutation({
-    onSuccess: () => {
-      refetch();
-      setIsPopupVisible(false);
-    },
-  });
 
   const handleUpdateClick = (job: JobApplication) => {
     setSelectedJob(job);
-    setNewStatus(job.status);
     setIsPopupVisible(true);
   };
 
