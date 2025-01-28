@@ -18,9 +18,9 @@ export default function Home() {
       <Templates />
       <Testimonials />
       <Pricing />
-      <div className="max-w-7xl mx-auto my-4">
+      {/* <div className="max-w-7xl mx-auto my-4">
         <IntegratedCompanies />
-      </div>
+      </div> */}
       <Footer />
     </main>
   );

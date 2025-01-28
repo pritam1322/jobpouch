@@ -1,8 +1,10 @@
-import { Calendar, ChevronsLeftRight, Home, Inbox, UserPen } from "lucide-react"
+'use client';
+import { Calendar, ChevronsLeftRight, ChevronsUpDown, Home, Inbox, MailPlus, UserPen } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,7 +13,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu"
+import { useSession } from "next-auth/react"
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -26,6 +35,11 @@ const items = [
     icon: Inbox,
   },
   {
+    title: "Email tracker",
+    url: "/emailJobApplication",
+    icon: MailPlus,
+  },
+  {
     title: "Project Section",
     url: "/projects",
     icon: Calendar,
@@ -38,6 +52,10 @@ const items = [
 ]
 
 export function ProjectSidebar() {
+
+  const { data: session } = useSession();
+  const candidateName = session?.user.name ? session?.user.name.split(' ')[0] : 'Username';
+
   return (
     <Sidebar>
         <SidebarHeader>
@@ -73,6 +91,37 @@ export function ProjectSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton className="py-7">
+                    <Avatar >
+                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar> { candidateName }
+                      <ChevronsUpDown className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                  <Link href='/' >Home</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href='/profile' >Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
     </Sidebar>
   )
 }

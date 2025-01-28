@@ -141,7 +141,7 @@ export const columns: ColumnDef<JobApplication>[] = [
                 <DropdownMenuItem
                     onClick={() => job.onStatusUpdate?.(job)} 
                 >
-                Update status
+                Update job
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={() => job.onDeleteJob?.(job)} 

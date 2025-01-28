@@ -5,13 +5,18 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/trpc-server/prisma';
 import bcrypt from "bcryptjs";
 import { getUserById } from '@/trpc-server/user';
+import toast from 'react-hot-toast';
 
 interface User {
   id: string;
   email: string;
   name?: string;
   image?: string;
+  gmailAccessToken?: string;  // Add the gmail access token field
+  gmailRefreshToken?: string;
 }
+
+
 
 const authOptions : NextAuthOptions = {
   debug: true,
@@ -20,7 +25,13 @@ const authOptions : NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      allowDangerousEmailAccountLinking: true
+      allowDangerousEmailAccountLinking: true,
+      authorization: {
+        params: {
+          scope: `openid profile email https://www.googleapis.com/auth/gmail.readonly`, // Adding Gmail scope
+          access_type: 'offline', 
+        },
+      },
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -60,13 +71,68 @@ const authOptions : NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider !== "credentials") return true;
-
-      await getUserById(Number(user.id));
+      const currentUser = await prisma.user.findUnique({
+        where: { email: user.email! },
+      })
+      if(!currentUser){
+        toast.error(`Please login`);
+        return false;
+      }
+      if (account?.provider !== "credentials"){
+        if (account?.provider === 'google') {
+          
+          const accountExists = await prisma.account.findUnique({
+            where: { userId: currentUser.id },
+          });
+          
+          if (accountExists) {
+            await prisma.account.update({
+              where: { userId: Number(currentUser.id) },
+              data: {
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+              },
+            });
+            await prisma.user.update({
+              where: { id: currentUser.id },
+              data: {
+                gmailAccessToken: account.access_token,
+                gmailRefreshToken: account.refresh_token,
+              },
+            });
+          } else {
+            await prisma.account.create({
+              data: {
+                userId: currentUser.id,
+                type: 'oauth',
+                provider: 'google',
+                providerAccountId: account.providerAccountId,
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+                scope: account.scope,
+                id_token: account.id_token,
+              },
+            });
+            await prisma.user.update({
+              where: { id: currentUser.id },
+              data: {
+                gmailAccessToken: account.access_token,
+                gmailRefreshToken: account.refresh_token,
+              },
+            });
+          }
+        }
+        return true;
+      }
+      
+      await getUserById(currentUser.id);
 
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       // When the user is returned from authorize, store user info in the token
       if (user) {
         token.user = {
@@ -75,12 +141,25 @@ const authOptions : NextAuthOptions = {
           name: user.name,
         }; // Ensure you're spreading the user properties correctly
       }
+
+      if (account && account.access_token) {
+        token.access_token = account.access_token; // Store the token here
+        token.refresh_token = account.refresh_token; 
+      }
+
       return token;
     },
     async session({ session, token }) {
       // Attach user info from the token to the session
       if (token.user) {
         session.user = token.user as User; // This should now have the correct user object
+      }
+      // Attach Gmail tokens to the session for API calls
+      if (token.access_token) {
+        session.user.access_token = token.access_token;
+      }
+      if (token.refresh_token) {
+        session.user.refresh_token = token.refresh_token; // Store the refresh token
       }
       return session;
     },

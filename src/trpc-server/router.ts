@@ -22,6 +22,21 @@ export const appRouter = router({
       }
     }),
 
+    getSingleApplication: publicProcedure
+    .input(
+      z.object({
+        applicationId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { applicationId } = input;
+      if (!applicationId) {
+        throw new Error("Not authenticated");
+      } else {
+        return await prisma.jobApplication.findUnique({ where: { id: applicationId } });
+      }
+    }),
+
     getUserByEmail: publicProcedure
     .input(
       z.object({
@@ -287,7 +302,70 @@ export const appRouter = router({
             id: input.applicationId,
           },
         })
-    })
+    }),
+
+    getAccountFromUserId:publicProcedure.input(
+      z.object({
+        userId: z.number()
+      })
+    )
+    .query(async({input}) => {
+      const { userId } = input;
+      return await prisma.account.findUnique({ where: { userId } })
+    }),
+
+    getEmailFetched:publicProcedure.input(
+      z.object({
+        userId: z.number()
+      })
+    )
+    .query(async({input}) => {
+      const { userId } = input;
+      return await prisma.email.findMany({ where: { userId } })
+    }),
+
+    deleteEmail: publicProcedure.input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ input }) => {
+        return prisma.email.delete({
+          where: {
+            id: input.id,
+          },
+        })
+    }),
+    updateJobApplication: publicProcedure.input(
+      z.object({
+        id: z.number(),
+        jobTitle: z.string().optional(),
+        companyName: z.string().optional(),
+        status: z.string().optional(),
+        appliedDate: z.string().datetime().optional(),
+        referralPerson: z.string().optional(),
+        jobLink: z.string().optional(),
+        referralPersonName: z.string().optional(),
+        salaryRange: z.string().optional(),
+        followupDate: z.string().datetime().optional(),
+      })
+    ).mutation(async ({ input }) => {
+      // Filter out undefined or empty fields from the input data
+      const updateData: Record<string, any> = {};
+    
+      // Loop through the input fields and only include those that are not undefined
+      for (const key in input) {
+        if (input[key as keyof typeof input] !== undefined) {
+          updateData[key as keyof typeof input] = input[key as keyof typeof input];
+        }
+      }
+    
+      // Perform the update with the dynamic data
+      return prisma.jobApplication.update({
+        where: { id: input.id },
+        data: updateData,
+      });
+    }),    
 });
 
 export type AppRouter = typeof appRouter;

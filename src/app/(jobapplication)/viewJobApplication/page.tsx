@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { trpc } from "@/trpc-client/client";
-import StatusPopup from "@/components/ViewJobComponents/StatusPopup";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Calendar, CircleCheck, CircleX, Gift } from "lucide-react";
@@ -19,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from "@/components/ui/alert-dialog"
+import UpdateJobApplication from "@/components/jobsPages/UpdateJobApplication";
 
 interface JobApplication {
   id: number;
@@ -131,12 +131,6 @@ export default function ViewJobApplication() {
     console.log('@@@@' + deletePopUp);
   } 
 
-  const handleStatusSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedJob) {
-      await updateStatusMutation.mutateAsync({ applicationId: selectedJob.id, status: newStatus });
-    }
-  };
 
   if (isLoading) {
     return (
@@ -230,13 +224,7 @@ export default function ViewJobApplication() {
       <DataTable data={filteredJobs} columns={columns} />
 
       {isPopupVisible && selectedJob && (
-        <StatusPopup
-          selectedJob={selectedJob}
-          newStatus={newStatus}
-          setNewStatus={setNewStatus}
-          onClose={() => setIsPopupVisible(false)}
-          onSubmit={handleStatusSubmit}
-        />
+        <UpdateJobApplication selectedJob={selectedJob} onClose={() => setIsPopupVisible(false)} onSubmit={() => {refetch()}}/>
       )}
     </section>
   );
