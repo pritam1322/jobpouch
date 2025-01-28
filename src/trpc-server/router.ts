@@ -22,6 +22,21 @@ export const appRouter = router({
       }
     }),
 
+    getSingleApplication: publicProcedure
+    .input(
+      z.object({
+        applicationId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { applicationId } = input;
+      if (!applicationId) {
+        throw new Error("Not authenticated");
+      } else {
+        return await prisma.jobApplication.findUnique({ where: { id: applicationId } });
+      }
+    }),
+
     getUserByEmail: publicProcedure
     .input(
       z.object({
@@ -59,7 +74,10 @@ export const appRouter = router({
         appliedDate: z.string().datetime(),
         referralPerson: z.string().optional(),
         jobLink: z.string(),
-        techguid: z.string()
+        techguid: z.string(),
+        referralPersonName: z.string().optional(),
+        salaryRange: z.string().optional(),
+        followupDate:  z.string().datetime()
       })
     )
     .mutation(async ({ input}) => {
@@ -75,7 +93,10 @@ export const appRouter = router({
           appliedDate: input.appliedDate,
           referralPerson: input.referralPerson || null,
           jobLink: input.jobLink,
-          techguid: input.techguid
+          techguid: input.techguid,
+          referralPersonName: input.referralPersonName || undefined,
+          salaryRange: input.salaryRange || null,
+          followupDate: input.followupDate
         },
       });
 
@@ -224,6 +245,141 @@ export const appRouter = router({
          },
       })
     }),
+
+    // Add project
+    addNewProject: publicProcedure.input(
+      z.object({
+        userId: z.number(),
+        title: z.string(),
+        description: z.string(),
+        techstack: z.string(),
+        githubLink: z.string().optional(),
+        liveLink: z.string().optional(),
+        thumbnail: z.string()
+      })
+    )
+    .mutation(async ({ input }) => {
+      return prisma.projects.create({
+        data: {
+          userId: input.userId,
+          title: input.title,
+          description: input.description,
+          techstack: input.techstack,
+          githubLink: input.githubLink || null,
+          liveLink: input.liveLink || null,
+          thumbnail: input.thumbnail
+        },
+      });
+    }),
+
+    getProjects: publicProcedure.input(
+      z.object({
+        userId: z.number() 
+      })
+    )
+    .query(async ({ input }) => {
+      const { userId } = input;
+      return await prisma.projects.findMany({ where: { userId } })
+    }),
+    getProjectById: publicProcedure.input(
+      z.object({
+        projectId: z.string()
+      })
+    )
+    .query(async({input}) => {
+      const { projectId } = input;
+      return await prisma.projects.findUnique({ where: { id: projectId } })
+    }),
+
+    deleteApplication: publicProcedure.input(
+      z.object({
+        applicationId: z.number()
+      })
+    )
+    .mutation(async ({ input }) => {
+        return prisma.jobApplication.delete({
+          where: {
+            id: input.applicationId,
+          },
+        })
+    }),
+
+    getAccountFromUserId:publicProcedure.input(
+      z.object({
+        userId: z.number()
+      })
+    )
+    .query(async({input}) => {
+      const { userId } = input;
+      return await prisma.account.findUnique({ where: { userId } })
+    }),
+
+    getEmailFetched:publicProcedure.input(
+      z.object({
+        userId: z.number()
+      })
+    )
+    .query(async({input}) => {
+      const { userId } = input;
+      return await prisma.email.findMany({ where: { userId } })
+    }),
+
+    deleteEmail: publicProcedure.input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ input }) => {
+        return prisma.email.delete({
+          where: {
+            id: input.id,
+          },
+        })
+    }),
+
+  updateJobApplication: publicProcedure.input(
+    z.object({
+      id: z.number(),
+      jobTitle: z.string().optional(),
+      companyName: z.string().optional(),
+      status: z.string().optional(),
+      appliedDate: z.string().datetime().optional(),
+      referralPerson: z.string().optional(),
+      jobLink: z.string().optional(),
+      referralPersonName: z.string().optional(),
+      salaryRange: z.string().optional(),
+      followupDate: z.string().datetime().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    // Define a type for the update data
+    type UpdateData = Partial<{
+      jobTitle: string;
+      companyName: string;
+      status: string;
+      appliedDate: string;
+      referralPerson: string;
+      jobLink: string;
+      referralPersonName: string;
+      salaryRange: string;
+      followupDate: string;
+    }>;
+
+    // Filter out undefined or empty fields from the input data
+    const updateData: UpdateData = {};
+
+    // Loop through the input fields and only include those that are not undefined
+    for (const key in input) {
+      if (key !== 'id' && input[key as keyof typeof input] !== undefined) {
+        updateData[key as keyof UpdateData] = input[key as keyof typeof input] as string | undefined;
+      }
+    }
+
+    // Perform the update with the dynamic data
+    return prisma.jobApplication.update({
+      where: { id: input.id },
+      data: updateData,
+    });
+  }),
 });
 
 export type AppRouter = typeof appRouter;

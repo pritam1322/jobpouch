@@ -1,27 +1,36 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { trpc } from '@/trpc-client/client';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function CreateJobApplication() {
-  const [companyName, setCompanyName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [jobLink, setJobLink] = useState('');
-  const [referralEmail, setReferralEmail] = useState('');
+  const [formData, setFormData] = useState({
+    companyName: '',
+    jobTitle: '',
+    jobLink: '',
+    referralPersonName: '',
+    referralPerson: '',
+    appliedDate: '',
+    status: 'Applied',
+    recruiterName: '',
+    salaryRange: '',
+    followupDate: '',
+  });
   const { data: session, status } = useSession();
   const createApplication = trpc.createApplication.useMutation();
   const router = useRouter();
-
+  
+  console.log(session?.user?.email);
   const { data: user } = trpc.getUserByEmail.useQuery(
     { email: session?.user?.email as string }, 
     { enabled: !!session?.user?.email }
   );
 
-  const candidateId = session?.user?.id ? parseInt(session.user.id as string) : null;
+  const candidateId = user?.id ? user.id : null;
 
 
   // Fetch job applications
@@ -34,8 +43,13 @@ export default function CreateJobApplication() {
     router.push('/');
   }
 
-  const handleSubmit = async () => {
-    if (!session?.user?.id) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); 
+    if (!candidateId) {
       alert('You must be logged in to create a job application.');
       return;
     }
@@ -62,91 +76,104 @@ export default function CreateJobApplication() {
 
     try {
       await createApplication.mutateAsync({
-        candidateId: Number(session.user.id),
-        companyName,
-        jobTitle,
-        status: 'Applied',
-        appliedDate: new Date().toISOString(),
-        referralPerson: referralEmail,
-        jobLink,
+        candidateId: candidateId,
+        ...formData,
+        appliedDate: new Date(formData.appliedDate).toISOString(),  // Ensure valid datetime
+        followupDate: new Date(formData.followupDate).toISOString(),
         techguid,
       });
       toast.success(`Job added to the list of applications`);
       router.push('/viewJobApplication');
     } catch (error) {
       toast.error(error + ' - Error creating application');
+      console.log('@@@@@@' + error);
     }
   };
 
   return (
-    <div className="min-h-screen mt-12 flex flex-col justify-center items-center">
-      <div className="bg-neutral-900 p-8 rounded-lg shadow-md max-w-lg w-full">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">
-          Create New Job Application
-        </h1>
-        <div className="mb-4">
-          <label className="block text-white font-semibold mb-2" htmlFor="company">
-            Company
-          </label>
-          <input
-            type="text"
-            id="company"
-            placeholder="Enter company name"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-white font-semibold mb-2" htmlFor="position">
-            Job Title
-          </label>
-          <input
-            type="text"
-            id="position"
-            placeholder="Enter job title"
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-white font-semibold mb-2" htmlFor="position">
-            Referral&apos;s Email
-          </label>
-          <input
-            type="text"
-            id="referralPerson"
-            placeholder="Enter email id of the person who referred you"
-            value={referralEmail}
-            onChange={(e) => setReferralEmail(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-white font-semibold mb-2" htmlFor="position">
-            Job Link
-          </label>
-          <input
-            type="text"
-            id="jobLink"
-            placeholder="Enter job link"
-            value={jobLink}
-            onChange={(e) => setJobLink(e.target.value)}
-            className="w-full p-3 border border-gray-700 rounded-lg text-gray-700 font-semibold bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <button
-          onClick={handleSubmit}
-          className="w-full text-lg py-3 mt-4 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition-all duration-300"
-        >
-          Submit Application
-        </button>
-        <div className='flex gap-2 my-2 text-white justify-center'>
-          <span className="">Go to existing job applications - </span> 
-          <Link href={'/viewJobApplication'} className="text-blue-700 hover:text-blue-500">view applications</Link>
-        </div>
+    <section id="addJob" className="min-w-full my-2 mx-auto">
+      <div className=" bg-neutral-900 rounded  p-6">
+          <h2 className="text-2xl text-neutral-200 font-bold">Add Job Application</h2>
+          <h3 className="text-sm text-neutral-400 mb-12">Track your job applications</h3>
+          <div className="max-w-4xl mx-auto">
+              <form onSubmit={handleSubmit} className="space-y-8 bg-neutral-800 w-full border border-gray-700 p-6 rounded-lg">
+                
+                {/* Basic Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Job Title</label>
+                    <input type="text" id="jobTitle" name="jobTitle" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Senior Frontend Developer"/>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Company Name</label>
+                    <input type="text" id="companyName" name="companyName" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Google"/>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Application Date</label>
+                    <input type="date" id="appliedDate" name="appliedDate" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Application Status</label>
+                    <select id="status" name="status" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option className='bg-gray-200'>Applied</option>
+                      <option className='bg-gray-200'>Accepted</option>
+                      <option className='bg-gray-200'>Rejected</option>
+                      <option className='bg-gray-200'>Interview</option>
+                      <option className='bg-gray-200'>Offer</option>
+                      
+                    </select>
+                  </div>
+                </div>
+
+                {/* Recruiter Information */}
+                <div className="border-t border-gray-600 pt-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Recruiter Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Recruiter Name</label>
+                      <input type="text" id="referralPersonName" name="referralPersonName" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. John Smith"/>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Recruiter Email</label>
+                      <input type="email" id="referralPerson" name="referralPerson" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. john@company.com"/>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Application Details */}
+                <div className="border-t border-gray-600 pt-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Application Details</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Job Posting URL</label>
+                      <input type="url" id="jobLink" name="jobLink" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="https://"/>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Salary Range</label>
+                      <input type="text" id="salaryRange" name="salaryRange" onChange={handleChange} className="w-full px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. $80,000 - $100,000"/>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Follow-up Reminder */}
+                <div className="border-t border-gray-600 pt-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Set Follow-up Reminder</label>
+                  <div className="flex items-center space-x-4">
+                    <input type="date" id="followupDate" name="followupDate" onChange={handleChange} className="flex-1 px-4 py-2 w-1/2 bg-neutral-700 border border-gray-600 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                    {/* <input type="time" id="position" className="w-32 px-4 py-2 bg-neutral-700 border border-gray-600 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/> */}
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-center ">
+                    <Button type="submit" variant="destructive" className="w-1/3">Save</Button>
+                </div>
+              </form>
+            </div>
       </div>
-    </div>
+  </section>
   );
 }

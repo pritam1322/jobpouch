@@ -1,8 +1,10 @@
-import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, Home, Inbox, UserPen } from "lucide-react"
+'use client';
+import { Calendar, ChartNoAxesCombined, ChevronsLeftRight, ChevronsUpDown, Inbox, MailPlus } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,15 +13,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu"
+import { useSession } from "next-auth/react"
+import Link from "next/link";
+
 
 // Menu items.
 const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
+  // {
+  //   title: "Home",
+  //   url: "/",
+  //   icon: Home,
+  // },
   {
     title: "Applied Jobs",
     url: "viewJobApplication",
@@ -31,9 +41,19 @@ const items = [
     icon: Calendar,
   },
   {
-    title: "Profile",
-    url: "/profile",
-    icon: UserPen,
+    title: "Email tracker",
+    url: "/emailJobApplication",
+    icon: MailPlus,
+  },
+  // {
+  //   title: "Profile",
+  //   url: "/profile",
+  //   icon: UserPen,
+  // },
+  {
+    title: "Explore Project",
+    url: "/projects",
+    icon: Calendar,
   },
   {
     title: "Statistics",
@@ -43,6 +63,10 @@ const items = [
 ]
 
 export function CandidateSidebar() {
+
+  const { data: session } = useSession();
+  const candidateName = session?.user.name ? session?.user.name.split(' ')[0] : 'Username';
+
   return (
     <Sidebar>
         <SidebarHeader>
@@ -78,6 +102,37 @@ export function CandidateSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton className="py-7">
+                    <Avatar >
+                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar> { candidateName }
+                      <ChevronsUpDown className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                  <Link href='/' >Home</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href='/profile' >Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
     </Sidebar>
   )
 }
