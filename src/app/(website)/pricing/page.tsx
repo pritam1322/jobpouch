@@ -102,8 +102,8 @@
 
             const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!);
             hmac.update(response.razorpay_payment_id + "|" + subscriptionId);
-            let generatedSignature = hmac.digest("hex");
-            let isSignatureValid = generatedSignature == response.razorpay_signature;
+            const generatedSignature = hmac.digest("hex");
+            const isSignatureValid = generatedSignature == response.razorpay_signature;
 
 
             if (isSignatureValid) {
