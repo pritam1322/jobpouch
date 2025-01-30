@@ -89,6 +89,7 @@ model SubscriptionDetails {
   razorpayPaymentId      String?
   razorpayOrderId        String?
   razorpaySignature      String?
+  razorpayCustomerId     String?
   status                 String // Subscription status (e.g., active, canceled)
   currentPeriodStart     DateTime?
   currentPeriodEnd       DateTime?

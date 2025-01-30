@@ -16,9 +16,9 @@ export async function POST(request : Request){
         // if(!user?.razorpayCustomerId){
         //     return NextResponse.json({error: 'No payment setup for logged in user found'}, {status: 301});
         // }
-        if(!user?.razorpayCustomerId){
-            return NextResponse.json({error: 'Payment setup is already done for current user'}, {status: 404});
-        }
+        // if(!user?.razorpayCustomerId){
+        //     return NextResponse.json({error: 'Payment setup is already done for current user'}, {status: 404});
+        // }
         if(!user.razorpaySubscriptionId){
             return NextResponse.json({error: 'Subcription already in progress'}, {status: 301});
         }

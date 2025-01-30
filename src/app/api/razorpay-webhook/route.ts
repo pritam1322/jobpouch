@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/trpc-server/prisma';
 import { headers } from 'next/headers';
-import crypto from 'crypto';
+import { validateWebhookSignature } from 'razorpay/dist/utils/razorpay-utils';
+
 
 interface RazorpaySubscription {
   id: string;
@@ -16,11 +17,12 @@ export async function POST(request: Request) {
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
   const rawBody = await request.text();
   const signature = headers().get('x-razorpay-signature');
-
+  console.log(signature);
+  // console.log(rawBody);
   try {
     // Verify Razorpay webhook signature
-    const isValidSignature = verifyRazorpaySignature(rawBody, signature!, webhookSecret);
-
+    const isValidSignature = validateWebhookSignature(rawBody, signature!, webhookSecret);
+    console.log(isValidSignature);
     if (!isValidSignature) {
       console.error('❌ Invalid Razorpay webhook signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
@@ -49,19 +51,25 @@ export async function POST(request: Request) {
   }
 }
 
-function verifyRazorpaySignature(payload: string, signature: string, secret: string): boolean {
-  const hash = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-  return hash === signature;
-}
+// function verifyRazorpaySignature(payload: string, signature: string, secret: string): boolean {
+//   const hash = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+//   return hash === signature;
+// }
 
 async function handleSubscriptionCreateOrUpdate(subscription: RazorpaySubscription) {
-  const razorpayCustomerId = subscription.customer_id;
+  const razorpaySubscriptionId = subscription.id;
+  const subs = await prisma.subscriptionDetails.findUnique({
+    where: { razorpaySubscriptionId }
+  })
+  if(!subs){
+    return NextResponse.json({ error: 'No Subscription created yet' }, { status: 401 });
+  }
   const user = await prisma.user.findUnique({
-    where: { razorpayCustomerId },
+    where: { id: subs.userId  },
   });
 
   if (!user) {
-    console.warn('No user found for Razorpay customer:', razorpayCustomerId);
+    console.warn('No user found for Razorpay customer:', subs.userId );
     return;
   }
 
