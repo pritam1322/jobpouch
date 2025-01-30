@@ -8,6 +8,7 @@
   import { trpc } from "@/trpc-client/client";
   import Script from "next/script";
   import { prisma } from "@/trpc-server/prisma";
+  import crypto from "crypto";
 
   interface RazorpayResponse {
     razorpay_payment_id: string,
@@ -46,9 +47,7 @@
   export default function PricingPage() {
     const router = useRouter();
     const { data: session, status } = useSession();
-    if(!session?.user?.email){
-      router.push('/login')
-    }
+    
 
     const { data: user } = trpc.getUserByEmail.useQuery(
       { email: session?.user?.email as string }, 
@@ -100,16 +99,25 @@
           image: "https://example.com/logo.png",
           handler: function (response: RazorpayResponse) {
             console.log("Payment Success:", response);
-            prisma.subscriptionDetails.update({
-              where: { razorpaySubscriptionId: subscriptionId},
-              data: {
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpayOrderId: response.razorpay_order_id,
-                razorpaySignature: response.razorpay_signature
-              }
-            })
-            toast.success("Payment Successful");
-            router.push('/success'); // Navigate to the desired route
+
+            const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!);
+            hmac.update(response.razorpay_payment_id + "|" + subscriptionId);
+            let generatedSignature = hmac.digest("hex");
+            let isSignatureValid = generatedSignature == response.razorpay_signature;
+
+
+            if (isSignatureValid) {
+              prisma.subscriptionDetails.update({
+                where: { razorpaySubscriptionId: subscriptionId},
+                data: {
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpaySignature: response.razorpay_signature
+                }
+              })
+              toast.success("Payment Successful");
+              router.push('/success'); // Navigate to the desired route
+            }
           },
           prefill: {
             name: user?.name || '',
@@ -218,9 +226,9 @@
         {user?.razorpaySubscriptionId && (
           <section className="max-w-5xl mx-auto my-12 hero-content">
             <div className="flex flex-col w-full">
-              <span className="text-center">Complete your payment setup</span>
+              <span className="text-center">Cancel Subscription Order</span>
               <button onClick={handleCancelSubscription} className="btn btn-error my-4 w-1/2 mx-auto text-white">
-                Payment setup
+                Cancel Subscription
               </button>
             </div>
           </section>
