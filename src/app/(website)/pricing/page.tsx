@@ -63,7 +63,7 @@
 
     const handleCheckout = async (plan: 'essential' | 'premium') => {
       
-      console.log('Stripe Publishable Key:', process.env.NEXT_PUBLIC_RAZORPAY_CLIENT_ID);
+      console.log(' Publishable Key:', process.env.NEXT_PUBLIC_RAZORPAY_CLIENT_ID);
       // const stripe = await stripePromise;
       toast.success('Subscription process Initiated')
       console.log('POST 123');
@@ -81,8 +81,9 @@
         body: body,
       });
       console.log(response);
-      const { subscriptionId, customerId } = await response.json();
-      console.log(subscriptionId);
+      const { subscription } = await response.json();
+      const subscriptionId = subscription.id;
+      console.log(subscription.id);
       
       if (subscriptionId) {
         // stripe?.redirectToCheckout({ sessionId });
@@ -91,7 +92,7 @@
         const options = {
           key: process.env.NEXT_PUBLIC_RAZORPAY_CLIENT_ID, // Razorpay key
           subscription_id: subscriptionId,
-          customer_id: customerId,
+          customer_id: subscription.customer_id,
           amount: amount.toString(),
           currency: "INR",
           name: "JobPouch",
@@ -107,14 +108,20 @@
 
 
             if (isSignatureValid) {
-              prisma.subscriptionDetails.update({
-                where: { razorpaySubscriptionId: subscriptionId},
+              prisma.subscriptionDetails.create({
                 data: {
-                  razorpayPaymentId: response.razorpay_payment_id,
-                  razorpayOrderId: response.razorpay_order_id,
-                  razorpaySignature: response.razorpay_signature
+                    userId: Number(candidateId!), // Ensure candidateId is not null
+                    razorpaySubscriptionId: subscription.id,
+                    status: subscription.status,
+                    razorpayCustomerId: subscription.customer_id,
+                    currentPeriodStart: new Date(subscription.current_start! * 1000),
+                    currentPeriodEnd: new Date(subscription.current_end! * 1000),
+                    razorpayPaymentId: response.razorpay_payment_id,
+                    razorpayOrderId: response.razorpay_order_id,
+                    razorpaySignature: response.razorpay_signature
                 }
-              })
+              });
+            
               toast.success("Payment Successful");
               router.push('/success'); // Navigate to the desired route
             }

@@ -30,35 +30,35 @@ export async function POST(request : Request){
         });
         console.log(subscription);
         console.log(subscription.customer_id);
-        const plan: string = subscription.plan_id === process.env.NEXT_PUBLIC_BASIC_PRICE_ID ? 'Essential' : 'Premium';
+        //const plan: string = subscription.plan_id === process.env.NEXT_PUBLIC_BASIC_PRICE_ID ? 'Essential' : 'Premium';
 
-        await prisma.user.update({
-            where: { id: userId },
-            data: { 
-                razorpayCustomerId: subscription.customer_id,
-                razorpaySubscriptionId: subscription.id,
-                subscriptionStatus: subscription.status,
-                subscriptionPlan: plan
-            }
-        });
+        // await prisma.user.update({
+        //     where: { id: userId },
+        //     data: { 
+        //         razorpayCustomerId: subscription.customer_id,
+        //         razorpaySubscriptionId: subscription.id,
+        //         subscriptionStatus: subscription.status,
+        //         subscriptionPlan: plan
+        //     }
+        // });
 
-        await prisma.subscriptionDetails.upsert({
-            where: { razorpaySubscriptionId: subscription.id },
-            update: {
-              status: subscription.status,
-              currentPeriodStart: new Date(subscription.current_start! * 1000),
-              currentPeriodEnd: new Date(subscription.current_end! * 1000),
-            },
-            create: {
-              userId: user.id,
-              razorpaySubscriptionId: subscription.id,
-              status: subscription.status,
-              currentPeriodStart: new Date(subscription.current_start! * 1000),
-              currentPeriodEnd: new Date(subscription.current_end! * 1000),
-            },
-          });
+        // await prisma.subscriptionDetails.upsert({
+        //     where: { razorpaySubscriptionId: subscription.id },
+        //     update: {
+        //       status: subscription.status,
+        //       currentPeriodStart: new Date(subscription.current_start! * 1000),
+        //       currentPeriodEnd: new Date(subscription.current_end! * 1000),
+        //     },
+        //     create: {
+        //       userId: user.id,
+        //       razorpaySubscriptionId: subscription.id,
+        //       status: subscription.status,
+        //       currentPeriodStart: new Date(subscription.current_start! * 1000),
+        //       currentPeriodEnd: new Date(subscription.current_end! * 1000),
+        //     },
+        //   });
 
-        return NextResponse.json({message: 'Subscription successfull',  subscriptionId: subscription.id, customerId: subscription.customer_id }, {status: 200});
+        return NextResponse.json({message: 'Subscription successfull',  subscription: subscription }, {status: 200});
 
     }catch(error){
         console.error(error);
