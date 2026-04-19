@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { trpc } from "@/trpc-client/client";
@@ -61,7 +61,7 @@ export default function ViewJobApplication() {
   });
 
   // Ensure jobs is an array
-  const jobArray = Array.isArray(jobs) ? jobs : jobs ? [jobs] : [];
+  const jobArray = useMemo(() => (Array.isArray(jobs) ? jobs : jobs ? [jobs] : []), [jobs]);
 
   const [filteredJobs, setFilteredJobs] = useState<JobApplication[]>([]);
 
@@ -85,7 +85,7 @@ export default function ViewJobApplication() {
     setFilteredJobs((prev) => 
       JSON.stringify(prev) !== JSON.stringify(transformedJobs) ? transformedJobs : prev
     );
-  }, [jobs]);
+  }, [jobArray]);
 
   useEffect(() => {
     if (error) {
@@ -109,7 +109,7 @@ export default function ViewJobApplication() {
       await deleteJobMutation.mutateAsync({ applicationId: jobToDelete.id });
       setJobToDelete(null);
       setDeletePopUp(false);
-      window.location.reload();
+      refetch();
     }
   };
 
@@ -118,9 +118,6 @@ export default function ViewJobApplication() {
     setJobToDelete(null);
     setDeletePopUp(false);
 
-    // Refresh the page using window.location.reload()
-    window.location.reload();
-    console.log('@@@@' + deletePopUp);
   } 
 
 

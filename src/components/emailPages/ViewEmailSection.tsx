@@ -1,7 +1,7 @@
 'use client';
 import { trpc } from "@/trpc-client/client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
@@ -33,23 +33,7 @@ export default function ViewEmailSection(){
     
     const deleteEmailMutation = trpc.deleteEmail.useMutation();
 
-      useEffect(() => {
-        if (emails) {
-          // Transform emails data to match EmailInterface shape
-          const transformedEmails = emails.map((email) => ({
-            id: email.id, // Store id as unique identifier
-            snippet: email.snippet, // Store snippet as body
-            onAddJobTrack: () => handleEmailToJob(email.snippet, email.id),
-            onDeleleEmail: () => handleEmailDelete(email.id),
-          }));
-          
-          setEmailData((prev) => 
-            JSON.stringify(prev) !== JSON.stringify(transformedEmails) ? transformedEmails : prev
-    );
-        }
-      }, [emails]);
-    
-      const handleEmailDelete = async(id: string) => {
+      const handleEmailDelete = useCallback(async(id: string) => {
         try{
             if(!id){
                 toast.error('No email id provided');
@@ -66,9 +50,9 @@ export default function ViewEmailSection(){
             toast.error('Failed to delete email');
             console.log(err);
         }
-      }
+      }, [deleteEmailMutation, refetch]);
 
-      const handleEmailToJob = async(snippet: string, id: string) => {
+      const handleEmailToJob = useCallback(async(snippet: string, id: string) => {
         try{
             const response = await fetch("/api/emailParsing", {
                 method: "POST",
@@ -84,7 +68,23 @@ export default function ViewEmailSection(){
             toast.error('Failed to parse email');
             console.log(err);
         }
-      };
+      }, [refetch]);
+
+      useEffect(() => {
+        if (emails) {
+          // Transform emails data to match EmailInterface shape
+          const transformedEmails = emails.map((email) => ({
+            id: email.id, // Store id as unique identifier
+            snippet: email.snippet, // Store snippet as body
+            onAddJobTrack: () => handleEmailToJob(email.snippet, email.id),
+            onDeleleEmail: () => handleEmailDelete(email.id),
+          }));
+          
+          setEmailData((prev) => 
+            JSON.stringify(prev) !== JSON.stringify(transformedEmails) ? transformedEmails : prev
+    );
+        }
+      }, [emails, handleEmailDelete, handleEmailToJob]);
 
     return(
         <section id="emailList" className="min-h-screen p-6">
