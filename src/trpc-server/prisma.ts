@@ -1,6 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 
-// Create a Prisma client instance and ensure only one instance is created (important for Next.js hot reloading)
-const prisma = new PrismaClient();
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
+
+// Ensure a single Prisma client instance across hot reloads in development.
+const prisma = global.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  global.prisma = prisma;
+}
 
 export { prisma }; 

@@ -5,7 +5,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/trpc-server/prisma';
 import bcrypt from "bcryptjs";
 import { getUserById } from '@/trpc-server/user';
-import toast from 'react-hot-toast';
 
 interface User {
   id: string;
@@ -19,7 +18,7 @@ interface User {
 
 
 const authOptions : NextAuthOptions = {
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -75,7 +74,6 @@ const authOptions : NextAuthOptions = {
         where: { email: user.email! },
       })
       if(!currentUser){
-        toast.error(`Please login`);
         return false;
       }
       if (account?.provider !== "credentials"){

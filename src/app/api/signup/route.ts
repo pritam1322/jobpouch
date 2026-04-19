@@ -17,14 +17,14 @@ export async function POST(request: Request) {
   }
 
   // Hash the password
-  const salt = bcrypt.genSaltSync(10);
-  body.password = bcrypt.hashSync(password, salt);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create a new user
   const user = await prisma.user.create({
     data: {
       email,
-      password,
+      password: hashedPassword,
       name
     },
   });

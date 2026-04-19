@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { publicProcedure, router } from "./index";
-
-const prisma = new PrismaClient();
+import { prisma } from "./prisma";
 
 export const appRouter = router({
   getApplication: publicProcedure
